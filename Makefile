@@ -1,7 +1,7 @@
 
 NAME = zappy
 
-FLAGS = -Wfatal-errors -Wall -Wextra -Werror -std=c++14
+FLAGS = -Wfatal-errors -std=c++14
 
 SRC =  ./src/*.cpp
 
