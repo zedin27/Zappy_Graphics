@@ -1,6 +1,6 @@
 #include "Sound.hpp"
 
-Sound::Sound(void)
+Sound::Sound(glm::vec2 pos) : _pos(pos)
 {
 }
 
