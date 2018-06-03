@@ -4,6 +4,16 @@ Map::Map(void)
 {
 	_events["ppo"] = [this](std::string data)
 	{
+		int id;
+		glm::vec2 pos;
+		int orientation;
+		std::stringstream ss;
+		ss << data; //Putting in my data string
+		ss >> id >> pos.x >> pos.y >> orientation; //Taking out my data string (Hint: whitespaces are important!)
+		
+		Player *p = getPlayer(id);
+		p->MoveTo(pos);
+		p->SetDir(_directions[orientation - 1]);
 		//change player position
 	};
 	_events["pnw"] = [this](std::string data)
