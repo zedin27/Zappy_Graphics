@@ -7,7 +7,6 @@ Map::Map(void)
 		int id;
 		glm::vec2 pos;
 		int orientation;
-
 		std::stringstream ss;
 		ss << data; //Putting in my data string
 		ss >> id >> pos.x >> pos.y >> orientation; //Taking out my data string (Hint: whitespaces are important!)
