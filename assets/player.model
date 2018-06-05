@@ -1,5 +1,5 @@
-meshes/player.obj
-textures/player.png
+meshes/block.obj
+textures/skybox/bottom.png
 
 	Material:
         0 specular
@@ -10,9 +10,9 @@ textures/player.png
 	Transform:
 	
 	matrix
-	1 0 0 0
-	0 1 0 0
-	0 0 1 0
+	0.5 0 0 0
+	0 0.5 0 0
+	0 0 0.5 0
 	0 0 0 1
 	
 	0.0
