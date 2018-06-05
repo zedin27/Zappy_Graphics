@@ -11,12 +11,12 @@ Map::Map(void)
 		std::stringstream ss;
 		ss << data; //Putting in my data string
 		ss >> id >> pos.x >> pos.y >> orientation; //Taking out my data string (Hint: whitespaces are important!)
-		
+
 		//change player position
 		Player *p = getPlayer(id);
 		p->MoveTo(pos);
 		p->SetDir(_directions[orientation - 1]);
-	
+
 	};
 	_events["pnw"] = [this](std::string data) //add new player
 	{
@@ -29,7 +29,7 @@ Map::Map(void)
 		std::stringstream ss;
 		ss << data;
 		ss >> id >> pos.x >> pos.y >> orientation >> level >> team_name;
-		
+
 		/*	pseudo for now
 		**	Player is created
 		**	New player arrives with ID, level, and name of the team
@@ -67,25 +67,29 @@ Map::Map(void)
 	};
 	_events["sgt"] = [this](std::string data) //get time unit (check Time.cpp/hpp)
 	{
-		double time;
+		double timer;
+		Time countdown;
 
 		std::stringstream ss;
 		ss << data;
 
-		ss >> time;
+		ss >> timer;
+		countdown.Start();
+
+
 	};
 	_events["msz"] = [this](std::string data) //map size or dimensions (check Map.cpp/hpp)
 	{
 		size_t x, y;
 		std::vector<vector<size_t>>some_matrix;
-		
+
 		std::stringstream ss;
 		ss << data;
 
 		ss >> x >> y;
 		_size.x = x;
 		_size.y = y;
-		
+
 	};
 	_events["enw"] = [this](std::string data) //add an egg from the player
 	{
@@ -132,7 +136,7 @@ Map::Map(void)
 		std::stringstream ss;
 		ss << data;
 
-		ss >> id >> message; 
+		ss >> id >> message;
 	};
 	_events["pic"] = [this](std::string data) //a ritual happens on square (with the force idea?)
 	{
@@ -173,9 +177,9 @@ Map::Map(void)
 		for()
 		{
 		if (_hatched == true)
-			return 
+			return
 		}
-		
+
 		//delete
 	};
 	_events["edi"] = [this](std::string data) //egg is bad - remove it
@@ -214,7 +218,7 @@ Map::Map(void)
 
 		ss >> team_name
 		/*
-		** if game status team_name finishes, then update the game and announce winner 
+		** if game status team_name finishes, then update the game and announce winner
 		*/
 	};
 }
@@ -227,5 +231,5 @@ void	Map::Update(double dt)
 {
 	//get server info...
 
-	
+
 }

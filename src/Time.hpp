@@ -5,8 +5,14 @@
 //! Time utility class
 class Time
 {
+	bool running;
+	bool resetted;
+	bool paused;
+	double begin;
+	double end;
 	double _oldTime;
 	double _deltaTime;
+
 public:
 	Time(void);
 
@@ -21,4 +27,15 @@ public:
 
 	//! Time since the last call to Time.Step
 	double Delta(void);
+
+	//Begin countdown of time
+	double Start(void);
+
+	//Stop countdown of time
+	double Stop(void);
+
+	bool isRunning();
+
+	//Ticks
+	clock_t Ticks();
 };

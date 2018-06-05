@@ -4,6 +4,7 @@
 #include "Player.hpp"
 #include "Egg.hpp"
 #include "Sound.hpp"
+#include "Time.hpp"
 
 class	Map
 {
