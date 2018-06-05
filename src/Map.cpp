@@ -65,6 +65,7 @@ Map::Map(void)
 		**	Resource of the tiles in the map (?)
 		*/
 	};
+
 	_events["sgt"] = [this](std::string data) //get time unit (check Time.cpp/hpp)
 	{
 		double timer;
@@ -74,10 +75,10 @@ Map::Map(void)
 		ss << data;
 
 		ss >> timer;
-		countdown.Start();
-
+		timer.Step();
 
 	};
+
 	_events["msz"] = [this](std::string data) //map size or dimensions (check Map.cpp/hpp)
 	{
 		size_t x, y;
@@ -91,6 +92,7 @@ Map::Map(void)
 		_size.y = y;
 
 	};
+	
 	_events["enw"] = [this](std::string data) //add an egg from the player
 	{
 		int egg;
@@ -102,9 +104,11 @@ Map::Map(void)
 
 		ss >> egg >> id >> pos.x >> pos.y;
 
-		Player *e = getEgg(id); //new egg created
+		_eggs.push_back(new Egg(pos, id));
 
 	};
+
+	//CURRENT
 	_events["pgt"] = [this](std::string data) //player picks resource
 	{
 		int id;
