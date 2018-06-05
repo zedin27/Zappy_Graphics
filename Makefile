@@ -27,7 +27,8 @@ Map \
 Player \
 Sound \
 FreeCamera \
-SkyBox
+SkyBox \
+Grid
 
 SRC_DIR = src
 OBJ_DIR = obj

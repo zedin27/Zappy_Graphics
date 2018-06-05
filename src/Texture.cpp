@@ -16,6 +16,7 @@ Texture::Texture(std::string filepath)
 		std::memmove(&_imageData[i * _width * 4], &_imageData[(_height - i - 1) * _width * 4], _width * 4);
 		std::memmove(&_imageData[(_height - i - 1) * _width * 4], &temp[0], _width * 4);
 	}
+
 }
 
 unsigned	Texture::Width(void)

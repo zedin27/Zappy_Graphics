@@ -3,6 +3,8 @@
 #include "FreeCamera.hpp"
 #include "Player.hpp"
 #include "SkyBox.hpp"
+#include "Grid.hpp"
+#include "Egg.hpp"
 
 int	main(void)
 {
@@ -14,14 +16,16 @@ int	main(void)
 	Time clock;
 	SkyBox sky("assets/textures/skybox/right.png",
 		   "assets/textures/skybox/left.png",
-		   "assets/textures/skybox/bottom.png",
 		   "assets/textures/skybox/top.png",
+		   "assets/textures/skybox/bottom.png",
 		   "assets/textures/skybox/front.png",
 		   "assets/textures/skybox/back.png");
+	Grid grid(10, 10);
+	Egg egg(glm::vec2(2, 2));
 	
 	glClearColor(0.2, 0.25, 0.3, 1);
 
-	glm::vec2 positions[2] = {{0, 0}, {0, 1}};
+	glm::vec2 positions[2] = {{0, 0}, {3, 9}};
 	
 	while (!window.ShouldClose())
 	{
@@ -41,6 +45,8 @@ int	main(void)
 		
 		cam.Update();
 		sky.Render(cam.Perspective());
+		grid.Render(cam.Perspective());
+		egg.Render(cam.Perspective());
 		p1.Render(cam.Perspective());
 		p2.Render(cam.Perspective());
 		

@@ -8,6 +8,6 @@ uniform mat4 projection;
 
 void	main()
 {
-	texCoor = vertex;
+	texCoor = vertex;	
 	gl_Position = projection * vec4(vertex, 1.0);
 }
