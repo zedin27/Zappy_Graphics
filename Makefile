@@ -25,7 +25,9 @@ Text \
 Egg \
 Map \
 Player \
-Sound
+Sound \
+FreeCamera \
+SkyBox
 
 SRC_DIR = src
 OBJ_DIR = obj
