@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <map>
+#include <list>
 #include <iterator>
 
 
