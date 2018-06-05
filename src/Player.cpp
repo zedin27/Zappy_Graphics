@@ -94,6 +94,7 @@ _ID(ID)
 
 Player::~Player(void)
 {
+	delete _model;
 }
 
 void	Player::MoveTo(glm::vec2 pos)
@@ -187,6 +188,6 @@ void	Player::Update(double dt)
 void	Player::Render(std::pair<glm::mat4, glm::mat4> perspective)
 {
 	float angle = acos(dot(glm::normalize(_modelDir), glm::vec2(1, 0)));
-	glm::mat4 rot = glm::rotate(angle, glm::vec3(0, 0, 1));
-	_model->Render(perspective, rot, glm::vec3(_modelPos.x, _modelPos.y, _height));
+	glm::mat4 rot = glm::rotate(angle, glm::vec3(0, 1, 0));
+	_model->Render(perspective, rot, glm::vec3(_modelPos.x, _height * 0.5, _modelPos.y));
 }

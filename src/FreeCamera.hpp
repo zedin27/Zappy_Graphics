@@ -6,8 +6,9 @@
 class	FreeCamera
 {
 	static glm::vec3 constexpr _basePos = {0, 0, 0};
-	static glm::vec3 constexpr _up = {0, 0, 1};
-	static glm::vec3 constexpr _forward = {1, 0, 0};
+	static glm::vec3 constexpr _up = {0, 1, 0};
+	static glm::vec3 constexpr _forward = {0, 0, -1};
+	static glm::vec3 constexpr _right = {1, 0, 0};
 
 	Window& _window;
 	

@@ -3,6 +3,7 @@
 glm::vec3 constexpr FreeCamera::_basePos;
 glm::vec3 constexpr FreeCamera::_up;
 glm::vec3 constexpr FreeCamera::_forward;
+glm::vec3 constexpr FreeCamera::_right;
 
 FreeCamera::FreeCamera(Window& window) : _window(window)
 {
@@ -11,13 +12,13 @@ FreeCamera::FreeCamera(Window& window) : _window(window)
 	_aspect = 1;
 	_near = 0.1;
 	_far = 512;
-	_fov = 80;
+	_fov = 45;
 
         glm::mat4 translate = glm::translate(_position);
 	glm::mat4 lookAt = glm::lookAt(glm::vec3(translate * _rotation * glm::vec4(_basePos, 1)),
 				       glm::vec3(translate * _rotation * glm::vec4(_forward, 1)),
 				       glm::vec3(translate * _rotation * glm::vec4(_up, 0)));
-	glm::mat4 perspective = glm::perspective(glm::radians(_fov), _aspect, _near, _far);
+	glm::mat4 perspective = glm::perspective(glm::radians(_fov), _window.GetAspect(), _near, _far);
 	_perspective.first = lookAt;
 	_perspective.second = perspective;
 }
@@ -74,26 +75,23 @@ void	FreeCamera::Update(void)
 	}
 	if (_window.Key(GLFW_KEY_DOWN))
 	{
-		_rotation = glm::rotate(_rotation, glm::radians(1.0f), glm::vec3(0, 1, 0));
+		_rotation = glm::rotate(_rotation, glm::radians(-1.0f), _right);
 		moved = true;
 	}
 	if (_window.Key(GLFW_KEY_UP))
 	{
-		_rotation = glm::rotate(_rotation, glm::radians(-1.0f), glm::vec3(0, 1, 0));
+		_rotation = glm::rotate(_rotation, glm::radians(1.0f), _right);
 		moved = true;
 	}
 	
-	if (moved)
-	{
-		glm::mat4 translate = glm::translate(_position);
-		glm::mat4 lookAt = glm::lookAt(glm::vec3(translate * glm::vec4(_basePos, 1)),
-					       glm::vec3(translate * _rotation * glm::vec4(_forward, 1)),
-					       glm::vec3(translate * _rotation * glm::vec4(_up, 0)));
-		glm::mat4 perspective = glm::perspective(glm::radians(_fov), _aspect, _near, _far);
-
-		_perspective.first = lookAt;
-		_perspective.second = perspective;
-	}
+	glm::mat4 translate = glm::translate(_position);
+	glm::mat4 lookAt = glm::lookAt(glm::vec3(translate * glm::vec4(_basePos, 1)),
+				       glm::vec3(translate * _rotation * glm::vec4(_forward, 1)),
+				       glm::vec3(translate * _rotation * glm::vec4(_up, 0)));
+	glm::mat4 perspective = glm::perspective(glm::radians(_fov), _window.GetAspect(), _near, _far);
+	
+	_perspective.first = lookAt;
+	_perspective.second = perspective;
 }
 
 std::pair<glm::mat4, glm::mat4> FreeCamera::Perspective(void)

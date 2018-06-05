@@ -3,18 +3,14 @@
 #include "zappy.hpp"
 #include "Model.hpp"
 
-class	Egg
+class	Grid
 {
-	glm::vec2 _pos;
-	bool _hatched;
-
+	int _x;
+	int _y;
 	Model *_model;
-	
 public:
-	Egg(glm::vec2 pos);
-	~Egg(void);
-
-	void	Crack(void);
+	Grid(int x, int y);
+	~Grid(void);
 
 	void	Render(std::pair<glm::mat4, glm::mat4> perspective);
 };

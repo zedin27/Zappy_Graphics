@@ -8,5 +8,6 @@ uniform samplerCube tex;
 
 void	main()
 {
-	color = texture(tex, texCoor);
+	vec4 xcolor = texture(tex, texCoor);
+	color = round(xcolor.xxzw * 4) / 4;
 }
