@@ -97,7 +97,8 @@ Map::Map(void)
 		ss << data;
 
 		ss >> egg >> id >> pos.x >> pos.y;
-		//_eggs.push_back()
+
+		Player *e = getEgg(id); //new egg created
 
 	};
 	_events["pgt"] = [this](std::string data) //player picks resource
@@ -110,7 +111,7 @@ Map::Map(void)
 
 		ss >> id >> resource;
 	};
-	_events["pin"] = [this](std::string data)
+	_events["pin"] = [this](std::string data) //ignore
 	{
 		//ignore
 	};
@@ -168,6 +169,13 @@ Map::Map(void)
 
 		ss >> egg;
 
+		//_eggs.erase(eggs.begin() + i);
+		for()
+		{
+		if (_hatched == true)
+			return 
+		}
+		
 		//delete
 	};
 	_events["edi"] = [this](std::string data) //egg is bad - remove it
@@ -194,7 +202,7 @@ Map::Map(void)
 		/*
 		** if player # dies, remove player object from map.(?)
 		*/
-		if (p)
+		if (_ID.p)
 			delete p;
 	};
 	_events["seg"] = [this](std::string data) //game is over (true/false of the map)
