@@ -2,6 +2,7 @@
 
 Map::Map(void)
 {
+	// [this] is basically calling every member from the class Map
 	_events["ppo"] = [this](std::string data)
 	{
 		int id;
@@ -76,20 +77,15 @@ Map::Map(void)
 	_events["msz"] = [this](std::string data) //map size or dimensions (check Map.cpp/hpp)
 	{
 		size_t x, y;
-
+		std::vector<vector<size_t>>some_matrix;
+		
 		std::stringstream ss;
 		ss << data;
 
 		ss >> x >> y;
-		/* Making the size of the map
-		for (size_t i = 0; i < x; i++)
-		{
-			for (size_t j = 0; j < y; j++)
-			{
-				//map[i][j] with you x and y values
-			}
-		}
-		*/
+		_size.x = x;
+		_size.y = y;
+		
 	};
 	_events["enw"] = [this](std::string data) //add an egg from the player
 	{
@@ -127,7 +123,7 @@ Map::Map(void)
 
 		ss >> id;
 	};
-	_events["pbc"] = [this](std::string data) //a player makes a sound
+	_events["pbc"] = [this](std::string data) //(Ignore for now)a player makes a sound
 	{
 		int id;
 		std::string message;
