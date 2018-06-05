@@ -30,13 +30,6 @@ Map::Map(void)
 		ss << data;
 		ss >> id >> pos.x >> pos.y >> orientation >> level >> team_name;
 
-		/*	pseudo for now
-		**	Player is created
-		**	New player arrives with ID, level, and name of the team
-		**	Spawns in a position
-		**	Starts in a direction of... (N, S, W, or E)
-		*/
-
 		_player.push_back(new Player(pos, orientation, team_name, id, level));
 
 	};
@@ -60,10 +53,6 @@ Map::Map(void)
 			ss >> q;
 		for (int i = 0; i < _resourses[x][y].size(); i++)
 			_resources[x][y][i] += quantity[i];
-
-		/*	pseudo for now
-		**	Resource of the tiles in the map (?)
-		*/
 	};
 
 	_events["sgt"] = [this](std::string data) //get time unit (check Time.cpp/hpp)
@@ -76,7 +65,6 @@ Map::Map(void)
 
 		ss >> timer;
 		timer.Step();
-
 	};
 
 	_events["msz"] = [this](std::string data) //map size or dimensions (check Map.cpp/hpp)
@@ -90,7 +78,6 @@ Map::Map(void)
 		ss >> x >> y;
 		_size.x = x;
 		_size.y = y;
-
 	};
 	
 	_events["enw"] = [this](std::string data) //add an egg from the player
@@ -108,7 +95,6 @@ Map::Map(void)
 
 	};
 
-	//CURRENT
 	_events["pgt"] = [this](std::string data) //player picks resource
 	{
 		int id;
@@ -207,9 +193,6 @@ Map::Map(void)
 		ss >> id;
 
 		Player *p = getPlayer(id);
-		/*
-		** if player # dies, remove player object from map.(?)
-		*/
 		if (_ID.p)
 			delete p;
 	};
@@ -221,9 +204,6 @@ Map::Map(void)
 		ss << data;
 
 		ss >> team_name
-		/*
-		** if game status team_name finishes, then update the game and announce winner
-		*/
 	};
 }
 
