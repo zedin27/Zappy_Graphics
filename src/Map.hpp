@@ -14,6 +14,8 @@ class	Map
 	std::vector<Sound*> _sounds;
 	glm::vec2 _size;
 	std::vector<std::vector<std::vector<int>>> _resources;
+	double _timeUnit;
+	
 	static const glm::vec2 _directions[4];
 	
 	Player	*getPlayer(int ID);

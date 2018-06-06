@@ -84,7 +84,7 @@ _teamName(name),
 _ID(ID),
 _mapSize(mapSize)
 {
-	_resources.resize(6);
+	_resources.resize(7);
 	_modelPos = _pos;
 	_modelDir = _dir;
 	_moveTime = 0;
@@ -124,8 +124,8 @@ void	Player::SetDir(glm::vec2 dir)
 
 void	Player::PickUp(std::vector<int> resources)
 {
-	assert(resources.size() == 6);
-	for (int i = 0; i < 6; i++)
+	assert(resources.size() == 7);
+	for (int i = 0; i < 7; i++)
 	{
 		assert(resources[i] >= 0);
 		_resources[i] += resources[i];
@@ -135,8 +135,8 @@ void	Player::PickUp(std::vector<int> resources)
 
 void	Player::PutDown(std::vector<int> resources)
 {
-	assert(resources.size() == 6);
-	for (int i = 0; i < 6; i++)
+	assert(resources.size() == 7);
+	for (int i = 0; i < 7; i++)
 	{
 		assert(resources[i] >= 0);
 		_resources[i] -= resources[i];

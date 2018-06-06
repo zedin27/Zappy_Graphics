@@ -58,8 +58,7 @@ Map::Map(void)
 		ss << data;
 		ss >> playerID >> pos.x >> pos.y >> orientation >> level >> team_name;
 
-		_players.push_back(new Player(pos, orientation, team_name, playerID, level));
-
+		_players.push_back(new Player(pos, _directions[orientation - 1], team_name, playerID, level, _size));
 	};
 	_events["ebo"] = [this](std::string data)
 	{
@@ -79,26 +78,22 @@ Map::Map(void)
 		ss >> x >> y;
 		for (auto& q : quantity)
 			ss >> q;
-		for (int i = 0; i < _resourses[x][y].size(); i++)
+		for (int i = 0; i < _resources[x][y].size(); i++)
 			_resources[x][y][i] += quantity[i];
 	};
 
 	_events["sgt"] = [this](std::string data) //get time unit (check Time.cpp/hpp)
 	{
-		double timer;
-		Time countdown;
-
 		std::stringstream ss;
 		ss << data;
 
-		ss >> timer;
-		timer.Step();
+		ss >> _timeUnit;
 	};
 
 	_events["msz"] = [this](std::string data) //map size or dimensions (check Map.cpp/hpp)
 	{
 		size_t x, y;
-		std::vector<vector<size_t>>some_matrix;
+		std::vector<std::vector<size_t>> some_matrix;
 
 		std::stringstream ss;
 		ss << data;
@@ -133,8 +128,12 @@ Map::Map(void)
 
 		ss >> playerID >> resource;
 
+		std::vector<int> resources;
+		resources.resize(7);
+		resources[resource] += 1;
+		
 		Player *p = getPlayer(playerID);
-		_ID.PickUp(resource);
+		p->PickUp(resources);
 	};
 
 	_events["pin"] = [this](std::string data) //ignore
@@ -176,7 +175,7 @@ Map::Map(void)
 		ss >> pos.x >> pos.y >> level; // can ignore these because of previous given information(?)
 
 		Player *p = getPlayer(playerID);
-		p.PartyMode(true);
+		p->PartyMode(true);
 	};
 
 	_events["plv"] = [this](std::string data) //IGNORE
@@ -240,7 +239,7 @@ Map::Map(void)
 		
 		for (size_t i = 0; i < _players.size(); i++)
 		{
-			if (_players[i]->ID() == id[i])
+			if (_players[i]->ID() == playerID)
 			{
 				delete _players[i];
 				_players.erase(_players.begin() + i);
@@ -252,7 +251,7 @@ Map::Map(void)
 	//CURRENT
 	_events["seg"] = [this](std::string data) //IGNORE: game is over (true/false of the map)
 	{
-		std::string team_name
+		std::string team_name;
 
 		std::stringstream ss;
 		ss << data;
