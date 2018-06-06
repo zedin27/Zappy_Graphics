@@ -12,11 +12,13 @@ class	Player
 	int _level;
 	std::string _teamName;
 	int _ID;
-
+	glm::vec2 _mapSize;
+	
 //rendering stuff:
 	
 	glm::vec2 _modelPos;
-	glm::vec2 _modelPosChange;
+	float _moveTime;
+	glm::vec2 _moveDir;
 	glm::vec2 _modelDir;
 	glm::vec2 _modelDirChange;
 	float _height;
@@ -30,7 +32,7 @@ class	Player
 	void	spaceOutPlayers(uint64_t key);
 	
 public:
-	Player(glm::vec2 pos, glm::vec2 dir, const std::string& name, int ID, int level);
+	Player(glm::vec2 pos, glm::vec2 dir, const std::string& name, int ID, int level, glm::vec2 mapSize);
 	~Player(void);
 
 	void	MoveTo(glm::vec2 pos);

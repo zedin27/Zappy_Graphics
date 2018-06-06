@@ -17,5 +17,5 @@ void	Egg::Crack(void)
 
 void	Egg::Render(std::pair<glm::mat4, glm::mat4> perspective)
 {
-	_model->Render(perspective, glm::mat4(1), glm::vec3(_pos.x, 0, _pos.y));
+	_model->Render(perspective, glm::mat4(1), glm::vec3(_pos.x, 0, -_pos.y));
 }

@@ -10,9 +10,8 @@ int	main(void)
 {
 	Window window(1600, 900, "zap");
 	FreeCamera cam(window);
-	Player p1(glm::vec2(0, 0), glm::vec2(0, 1), "p1", 1, 1);
-	Player p2(glm::vec2(0, 0), glm::vec2(1, 0), "p2", 2, 1);
-	Light light(glm::vec3(1000, 1000, 0), glm::vec3(1, 1, 1), 100000);
+	Player p1(glm::vec2(9, 9), glm::vec2(0, 1), "p1", 1, 1, glm::vec2(10, 10));
+	Light light(glm::vec3(5, 5, -5), glm::vec3(1, 1, 1), 5);
 	Time clock;
 	SkyBox sky("assets/textures/skybox/right.png",
 		   "assets/textures/skybox/left.png",
@@ -25,7 +24,8 @@ int	main(void)
 	
 	glClearColor(0.2, 0.25, 0.3, 1);
 
-	glm::vec2 positions[2] = {{0, 0}, {3, 9}};
+	glm::vec2 positions[4] = {{9, 9}, {9, 0}, {0, 0}, {0, 9}};
+	glm::vec2 directions[4] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 	
 	while (!window.ShouldClose())
 	{
@@ -34,21 +34,22 @@ int	main(void)
 			std::cerr << err << std::endl;
 		window.Clear();
 		clock.Step();
-		p1.Update(clock.Delta());
-		p2.Update(clock.Delta());
-
-		size_t t1 = clock.Total() / 5;
-		size_t t2 = clock.Total() / 7;
 		
-		p1.MoveTo(positions[t1 % 2]);
-		p2.MoveTo(positions[t2 % 2]);
+		p1.Update(clock.Delta());
+
+		int index1 = clock.Total() / 4.0f;
+		int index2 = clock.Total() / 4.0f + 0.5f;
+		index1 %= 4;
+		index2 %= 4;
+
+		p1.SetDir(directions[index1]);
+		p1.MoveTo(positions[index2]);
 		
 		cam.Update();
 		sky.Render(cam.Perspective());
 		grid.Render(cam.Perspective());
 		egg.Render(cam.Perspective());
 		p1.Render(cam.Perspective());
-		p2.Render(cam.Perspective());
 		
 		window.Render();
 	}

@@ -16,7 +16,7 @@ void	Grid::Render(std::pair<glm::mat4, glm::mat4> perspective)
 	{
 		for (int y = 0; y < _y; y++)
 		{
-			_model->Render(perspective, glm::mat4(1), glm::vec3(x, -1, y));
+			_model->Render(perspective, glm::mat4(1), glm::vec3(x, -1, -y));
 		}
 	}
 }
