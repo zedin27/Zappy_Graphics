@@ -7,22 +7,24 @@ Map::Map(void)
 	// [this] is basically calling every member from the class Map
 	_events["ppo"] = [this](std::string data)
 	{
-		int id;
+		int playerID;
 		glm::vec2 pos;
 		int orientation;
+
 		std::stringstream ss;
 		ss << data; //Putting in my data string
-		ss >> id >> pos.x >> pos.y >> orientation; //Taking out my data string (Hint: whitespaces are important!)
+
+		ss >> playerID >> pos.x >> pos.y >> orientation; //Taking out my data string (Hint: whitespaces are important!)
 
 		//change player position
-		Player *p = getPlayer(id);
+		Player *p = getPlayer(playerID);
 		p->MoveTo(pos);
 		p->SetDir(_directions[orientation - 1]);
 
 	};
 	_events["pnw"] = [this](std::string data) //add new player
 	{
-		int id;
+		int playerID;
 		glm::vec2 pos;
 		int orientation;
 		int level;
@@ -30,9 +32,9 @@ Map::Map(void)
 
 		std::stringstream ss;
 		ss << data;
-		ss >> id >> pos.x >> pos.y >> orientation >> level >> team_name;
+		ss >> playerID >> pos.x >> pos.y >> orientation >> level >> team_name;
 
-		_player.push_back(new Player(pos, orientation, team_name, id, level));
+		_player.push_back(new Player(pos, orientation, team_name, playerID, level));
 
 	};
 	_events["ebo"] = [this](std::string data)
@@ -85,81 +87,80 @@ Map::Map(void)
 	_events["enw"] = [this](std::string data) //add an egg from the player
 	{
 		int egg;
-		int id;
+		int playerID;
 		glm::vec2 pos;
 
 		std::stringstream ss;
 		ss << data;
 
-		ss >> egg >> id >> pos.x >> pos.y;
+		ss >> egg >> playerID >> pos.x >> pos.y;
 
-		_eggs.push_back(new Egg(pos, id));
+		_eggs.push_back(new Egg(pos, playerID));
 
 	};
 
 	_events["pgt"] = [this](std::string data) //player picks resource
 	{
-		int id;
+		int playerID;
 		int resource;
 
 		std::stringstream ss;
 		ss << data;
 
-		ss >> id >> resource;
+		ss >> playerID >> resource;
 
-		Player *p = getPlayer(id);
+		Player *p = getPlayer(playerID);
 		_ID.PickUp(resource);
 	};
 
 	_events["pin"] = [this](std::string data) //ignore
 	{
-	
+		//ignore
 	};
 
 	_events["pex"] = [this](std::string data) //a player kick out
 	{
-		int id;
+		int playerID;
 
 		std::stringstream ss;
 		ss << data;
 
-		ss >> id;
+		ss >> playerID;
 		
 	};
 	
-	_events["pbc"] = [this](std::string data) //(Ignore for now)a player makes a sound
+	_events["pbc"] = [this](std::string data) //IGNORE: a player makes a sound
 	{
-		int id;
+		int playerID;
 		std::string message;
 
 		std::stringstream ss;
 		ss << data;
 
-		ss >> id >> message;
+		ss >> playerID >> message;
 	};
 
-	//CURRENT
-	_events["pic"] = [this](std::string data) //a ritual happens on square (with the force idea?)
+	_events["pic"] = [this](std::string data) // IGNORE: a ritual happens on square (with the force idea?)
 	{
 		glm::vec2 pos;
 		int level;
-		int id;
+		int playerID;
 
 		std::stringstream ss;
 		ss << data;
 
 		ss >> pos.x >> pos.y >> level; // can ignore these because of previous given information(?)
 
-		Player *p = getPlayer(id);
+		Player *p = getPlayer(playerID);
 		p.PartyMode(true);
 	};
 
-	_events["plv"] = [this](std::string data)
+	_events["plv"] = [this](std::string data) //IGNORE
 	{
 		//ignore
 	};
 
-	_events["pfk"] = [this](std::string data)
+	_events["pfk"] = [this](std::string data) //IGNORE
 	{
 		//ignore
 	};
@@ -172,10 +173,6 @@ Map::Map(void)
 		ss << data;
 
 		ss >> eggID;
-
-		//Egg *e = getEgg(egg);
-
-		std::vector<int> arr;
 
 		for (size_t i = 0; i < _eggs.size(); i++)
 		{
@@ -190,33 +187,46 @@ Map::Map(void)
 
 	_events["edi"] = [this](std::string data) //egg is bad - remove it
 	{
-		int egg;
+		int eggID;
 
 		std::stringstream ss;
 		ss << data;
 
-		ss >> egg;
+		ss >> eggID;
 		
-		Egg *e = getEgg(egg);
-		
-		//delete
+		for (size_t i = 0; i < _eggs.size(); i++)
+		{
+			if (_eggs[i]->ID() == eggID)
+			{
+				delete _eggs[i];
+				_eggs.erase(_eggs.begin() + i);
+				break ;
+			}
+		}
 	};
 
 	_events["pdi"] = [this](std::string data) //player dies - remove it
 	{
-		int id;
+		int playerID;
 
 		std::stringstream ss;
 		ss << data;
 
-		ss >> id;
-
-		Player *p = getPlayer(id);
-		if (_ID.p)
-			delete p;
+		ss >> playerID;
+		
+		for (size_t i = 0; i < _players.size(); i++)
+		{
+			if (_players[i]->ID() == id[i])
+			{
+				delete _players[i];
+				_players.erase(_players.begin() + i);
+				break ;
+			}
+		}
 	};
 
-	_events["seg"] = [this](std::string data) //game is over (true/false of the map)
+	//CURRENT
+	_events["seg"] = [this](std::string data) //IGNORE: game is over (true/false of the map)
 	{
 		std::string team_name
 
