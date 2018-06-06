@@ -28,6 +28,8 @@ Egg	*Map::getEgg(int ID)
 
 Map::Map(void)
 {
+	_grid = nullptr;
+	
 	// [this] is basically calling every member from the class Map
 	_events["ppo"] = [this](std::string data)
 	{
@@ -101,6 +103,7 @@ Map::Map(void)
 		ss >> x >> y;
 		_size.x = x;
 		_size.y = y;
+		_grid = new Grid(x, y);
 	};
 	
 	_events["enw"] = [this](std::string data) //add an egg from the player
@@ -264,10 +267,31 @@ Map::~Map(void)
 {
 }
 
-void	Map::Update(double dt)
+void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 {
-	//get server info...
+	std::vector<std::string> commands;
+	std::vector<std::string> data;
+	
+	for (size_t i = 0; i < commands.size(); i++)
+	{
+		if (_events.count(commands[i]) != 0)
+			_events[commands[i]](data[i]);
+	}
+	
+	for (Player *p : _players)
+	{
+		p->Update(dt);
+		p->Render(perspective);
+	}
 
+	for (Egg *e : _eggs)
+	{
+		e->Render(perspective);
+	}
 
+	if (_grid)
+	{
+		_grid->Render(perspective);
+	}
 }
 
