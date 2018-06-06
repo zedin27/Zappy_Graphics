@@ -1,6 +1,30 @@
 #include "Map.hpp"
 
+const glm::vec2 Map::_directions[4] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
 //FIXME: Lambda expressions that has the Player class will be changed. Check before testing
+
+Player	*Map::getPlayer(int ID)
+{
+	for (size_t i = 0; i < _players.size(); i++)
+	{
+		if (ID == _players[i]->ID())
+			return _players[i];
+	}
+	assert(1);
+	return nullptr;
+}
+
+Egg	*Map::getEgg(int ID)
+{
+	for (size_t i = 0; i < _players.size(); i++)
+	{
+		if (ID == _eggs[i]->ID())
+			return _eggs[i];
+	}
+	assert(1);
+	return nullptr;
+}
 
 Map::Map(void)
 {
@@ -34,7 +58,7 @@ Map::Map(void)
 		ss << data;
 		ss >> playerID >> pos.x >> pos.y >> orientation >> level >> team_name;
 
-		_player.push_back(new Player(pos, orientation, team_name, playerID, level));
+		_players.push_back(new Player(pos, orientation, team_name, playerID, level));
 
 	};
 	_events["ebo"] = [this](std::string data)

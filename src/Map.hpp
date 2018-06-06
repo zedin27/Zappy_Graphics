@@ -14,6 +14,11 @@ class	Map
 	std::vector<Sound*> _sounds;
 	glm::vec2 _size;
 	std::vector<std::vector<std::vector<int>>> _resources;
+	static const glm::vec2 _directions[4];
+	
+	Player	*getPlayer(int ID);
+	Egg	*getEgg(int ID);
+	
 public:
 	Map(void);
 	~Map(void);
