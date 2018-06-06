@@ -1,5 +1,7 @@
 #include "Map.hpp"
 
+//FIXME: Lambda expressions that has the Player class will be changed. Check before testing
+
 Map::Map(void)
 {
 	// [this] is basically calling every member from the class Map
@@ -104,12 +106,17 @@ Map::Map(void)
 		ss << data;
 
 		ss >> id >> resource;
+
+		Player *p = getPlayer(id);
+		_ID.PickUp(resource);
 	};
+
 	_events["pin"] = [this](std::string data) //ignore
 	{
-		//ignore
+	
 	};
-	_events["pex"] = [this](std::string data) //a player uses kick
+
+	_events["pex"] = [this](std::string data) //a player kick out
 	{
 		int id;
 
@@ -117,7 +124,9 @@ Map::Map(void)
 		ss << data;
 
 		ss >> id;
+		
 	};
+	
 	_events["pbc"] = [this](std::string data) //(Ignore for now)a player makes a sound
 	{
 		int id;
@@ -128,6 +137,8 @@ Map::Map(void)
 
 		ss >> id >> message;
 	};
+
+	//CURRENT
 	_events["pic"] = [this](std::string data) //a ritual happens on square (with the force idea?)
 	{
 		glm::vec2 pos;
@@ -139,39 +150,44 @@ Map::Map(void)
 
 		ss >> pos.x >> pos.y >> level; // can ignore these because of previous given information(?)
 
-		while (!ss.empty())
-		{
-			ss >> id;
-			Player *p = getPlayer(id);
-			p->PartyMode(true);
-		}
+		Player *p = getPlayer(id);
+		p.PartyMode(true);
 	};
+
 	_events["plv"] = [this](std::string data)
 	{
 		//ignore
 	};
+
 	_events["pfk"] = [this](std::string data)
 	{
 		//ignore
 	};
+
 	_events["eht"] = [this](std::string data) //egg hatches - remove it
 	{
-		int egg;
+		int eggID;
 
 		std::stringstream ss;
 		ss << data;
 
-		ss >> egg;
+		ss >> eggID;
 
-		//_eggs.erase(eggs.begin() + i);
-		for()
+		//Egg *e = getEgg(egg);
+
+		std::vector<int> arr;
+
+		for (size_t i = 0; i < _eggs.size(); i++)
 		{
-		if (_hatched == true)
-			return
+			if (_eggs[i]->ID() == eggID)
+			{
+				delete _eggs[i];
+				_eggs.erase(_eggs.begin() + i);
+				break;
+			}
 		}
-
-		//delete
 	};
+
 	_events["edi"] = [this](std::string data) //egg is bad - remove it
 	{
 		int egg;
@@ -180,9 +196,12 @@ Map::Map(void)
 		ss << data;
 
 		ss >> egg;
-
+		
+		Egg *e = getEgg(egg);
+		
 		//delete
 	};
+
 	_events["pdi"] = [this](std::string data) //player dies - remove it
 	{
 		int id;
@@ -196,6 +215,7 @@ Map::Map(void)
 		if (_ID.p)
 			delete p;
 	};
+
 	_events["seg"] = [this](std::string data) //game is over (true/false of the map)
 	{
 		std::string team_name
@@ -203,7 +223,7 @@ Map::Map(void)
 		std::stringstream ss;
 		ss << data;
 
-		ss >> team_name
+		ss >> team_name;
 	};
 }
 
