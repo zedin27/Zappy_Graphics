@@ -1,5 +1,5 @@
 meshes/block.obj
-textures/player.png
+textures/green.png
 
 	Material:
 	0 specular
@@ -10,9 +10,9 @@ textures/player.png
 	Transform:
 	
 	matrix
-	1 0 0 0
-	0 1 0 0
-	0 0 1 0
+	0.95 0 0 0
+	0 0.95 0 0
+	0 0 0.95 0
 	0 0 0 1
 	
 	0.0

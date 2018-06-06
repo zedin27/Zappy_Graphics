@@ -75,18 +75,19 @@ void	Player::spaceOutPlayers(uint64_t key)
 	}
 }
 
-Player::Player(glm::vec2 pos, glm::vec2 dir, const std::string& name, int ID, int level) :
+Player::Player(glm::vec2 pos, glm::vec2 dir, const std::string& name, int ID, int level, glm::vec2 mapSize) :
 _pos(pos),
 _dir(dir),
 _ritual(false),
 _level(level),
 _teamName(name),
-_ID(ID)
+_ID(ID),
+_mapSize(mapSize)
 {
 	_resources.resize(6);
 	_modelPos = _pos;
 	_modelDir = _dir;
-	_modelPosChange = glm::vec2(0, 0);
+	_moveTime = 0;
 	_modelDirChange = glm::vec2(0, 0);
 	stopMoving();
 	_model = new Model("assets/player.model");
@@ -101,8 +102,11 @@ void	Player::MoveTo(glm::vec2 pos)
 {
 	if (pos != _pos)
 	{
+		assert(pos == glm::mod(_pos + _dir, _mapSize));
+		
 		_pos = pos;
-		_modelPosChange = _pos - _modelPos;
+		_moveTime = 1;
+		_moveDir = _dir;
 		startMoving();
 	}
 }
@@ -111,6 +115,8 @@ void	Player::SetDir(glm::vec2 dir)
 {
 	if (dir != _dir)
 	{
+		assert(glm::dot(dir, _dir) == 0);
+		
 		_dir = dir;
 		_modelDirChange = _dir - _modelDir;
 	}
@@ -162,17 +168,20 @@ int	Player::ID(void)
 void	Player::Update(double dt)
 {
 
-	if (_modelPosChange.x || _modelPosChange.y)
+	if (_moveTime > 0)
 	{
-		_modelPos += _modelPosChange * dt;
-		glm::vec2 posError = _pos - _modelPos;
-		if (glm::dot(posError, _modelPosChange) < 0)
+		glm::vec2 newpos = _modelPos + _modelDir * dt;
+		newpos = glm::mod(newpos, _mapSize);
+		_modelPos = newpos;
+		_moveTime -= dt;
+		if (_moveTime < 0)
 		{
+			_moveTime = 0;
 			_modelPos = _pos;
-			_modelPosChange	= glm::vec2(0, 0);
 			stopMoving();
 		}
 	}
+
 	if (_modelDirChange.x || _modelDirChange.y)
 	{
 		_modelDir += _modelDirChange * dt;
@@ -187,7 +196,15 @@ void	Player::Update(double dt)
 
 void	Player::Render(std::pair<glm::mat4, glm::mat4> perspective)
 {
-	float angle = acos(dot(glm::normalize(_modelDir), glm::vec2(1, 0)));
+	float angle = acos(glm::dot(_modelDir, glm::vec2(1, 0)));
+	
+	if (glm::dot(_modelDir, glm::vec2(0, 1)) < 0)
+	{
+		angle = 2 * M_PI - angle;
+	}
+
+	std::cout << angle << " " << _modelDir.x << " " << _modelDir.y << std::endl;
+	
 	glm::mat4 rot = glm::rotate(angle, glm::vec3(0, 1, 0));
-	_model->Render(perspective, rot, glm::vec3(_modelPos.x, _height * 0.5, _modelPos.y));
+	_model->Render(perspective, rot, glm::vec3(_modelPos.x, _height * 0.5, -_modelPos.y));
 }
