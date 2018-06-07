@@ -9,15 +9,42 @@
 #include "FPSDisplay.hpp"
 
 #include <fcntl.h>
+#include <unistd.h>
+#include <cstdlib>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
 
-int	main(void)
+int client_socket(char *ip, uint16_t port)
 {
-	int fd = open("test", O_RDONLY);
+	struct sockaddr_in	client_addr;
+	int					        sockfd;
+	
+	if ((sockfd = socket(AF_INET, SOCK_STREAM, 6)) == -1)
+		return (-1);
+	client_addr.sin_family = AF_INET;
+	client_addr.sin_port = htons(port);
+	if ((client_addr.sin_addr.s_addr = inet_addr(ip)) == (in_addr_t)-1)
+    return (-1);
+	if (connect(sockfd, (struct sockaddr*)&client_addr, sizeof(struct sockaddr_in)) == -1)
+	{
+		printf("No bueno %s\n", strerror(errno));
+		return (-1);
+	}
+	return (sockfd);
+}
+
+int	main(int argc, char *argv[])
+{
+	int	clientfd;
 		
+	if (argc <= 2
+		|| (clientfd = client_socket(argv[1], atoi(argv[2])) == -1))
+		return (EXIT_FAILURE);
 	Window window(1600, 900, "zap");
 	FreeCamera cam(window);
 	Light light(glm::vec3(1000, 1000, 0), glm::vec3(1, 1, 1), 1000000);
-	Map map(fd, glm::vec2(25, 25));
+	Map map(clientfd, glm::vec2(25, 25));
 	Time clock;
 	FPSDisplay fps;
 	SkyBox sky("assets/textures/skybox/right.png",
