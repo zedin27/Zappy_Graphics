@@ -29,6 +29,7 @@ Sound \
 FreeCamera \
 SkyBox \
 Grid \
+FPSDisplay \
 ServerMonitor
 
 SRC_DIR = src

@@ -17,8 +17,6 @@ void	Player::stopMoving(void)
 
 	uint64_t key = keyHash(_modelPos);
 
-	std::cout << key << " here" << std::endl;
-	
 	if (_staticPlayers.count(key) == 0)
 	{
 		std::list<Player*> l = {this};
@@ -40,8 +38,6 @@ void	Player::startMoving(void)
 
 	uint64_t key = keyHash(_modelPos);
 
-	std::cout << key << " o" << std::endl;
-	
 	if (_staticPlayers.count(key) == 0)
 	{
 		std::cout << "this should not be happening" << std::endl;
@@ -203,8 +199,6 @@ void	Player::Render(std::pair<glm::mat4, glm::mat4> perspective)
 		angle = 2 * M_PI - angle;
 	}
 
-	std::cout << angle << " " << _modelDir.x << " " << _modelDir.y << std::endl;
-	
 	glm::mat4 rot = glm::rotate(angle, glm::vec3(0, 1, 0));
 	_model->Render(perspective, rot, glm::vec3(_modelPos.x, _height * 0.5, -_modelPos.y));
 }
