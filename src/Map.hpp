@@ -6,6 +6,7 @@
 #include "Sound.hpp"
 #include "Time.hpp"
 #include "Grid.hpp"
+#include "ServerMonitor.hpp"
 
 class	Map
 {
@@ -16,7 +17,8 @@ class	Map
 	glm::vec2 _size;
 	std::vector<std::vector<std::vector<int>>> _resources;
 	double _timeUnit;
-	Grid *_grid;
+	Grid _grid;
+	ServerMonitor _serverMonitor;
 	
 	static const glm::vec2 _directions[4];
 	
@@ -24,7 +26,7 @@ class	Map
 	Egg	*getEgg(int ID);
 	
 public:
-	Map(void);
+	Map(int fd, glm::vec2 size);
 	~Map(void);
 
 	void	Render(std::pair<glm::mat4, glm::mat4> perspective, double dt);

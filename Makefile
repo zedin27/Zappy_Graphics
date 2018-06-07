@@ -28,7 +28,8 @@ Player \
 Sound \
 FreeCamera \
 SkyBox \
-Grid
+Grid \
+ServerMonitor
 
 SRC_DIR = src
 OBJ_DIR = obj

@@ -26,10 +26,8 @@ Egg	*Map::getEgg(int ID)
 	return nullptr;
 }
 
-Map::Map(void)
+Map::Map(int fd, glm::vec2 size) : _size(size), _grid(size.x, size.y), _serverMonitor(fd)
 {
-	_grid = nullptr;
-	
 	// [this] is basically calling every member from the class Map
 	_events["ppo"] = [this](std::string data)
 	{
@@ -103,7 +101,6 @@ Map::Map(void)
 		ss >> x >> y;
 		_size.x = x;
 		_size.y = y;
-		_grid = new Grid(x, y);
 	};
 	
 	_events["enw"] = [this](std::string data) //add an egg from the player
@@ -265,12 +262,19 @@ Map::Map(void)
 
 Map::~Map(void)
 {
+	for (auto p : _players)
+		delete p;
+	for (auto e : _eggs)
+		delete e;
+	for (auto s : _sounds)
+		delete s;
 }
 
 void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 {
-	std::vector<std::string> commands;
-	std::vector<std::string> data;
+	_serverMonitor.Update();
+	const std::vector<const std::string>& commands = _serverMonitor.Commands();
+	const std::vector<const std::string>& data = _serverMonitor.Data();
 	
 	for (size_t i = 0; i < commands.size(); i++)
 	{
@@ -289,9 +293,6 @@ void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 		e->Render(perspective);
 	}
 
-	if (_grid)
-	{
-		_grid->Render(perspective);
-	}
+	_grid.Render(perspective);
 }
 
