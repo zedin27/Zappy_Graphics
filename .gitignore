@@ -7,6 +7,8 @@ lib
 *.o
 *.a
 *.dSYM
+.vs*
+
 # Prerequisites
 *.d
 docs/xml

@@ -7,6 +7,7 @@ class Time
 {
 	double _oldTime;
 	double _deltaTime;
+
 public:
 	Time(void);
 

@@ -4,6 +4,9 @@
 #include "Player.hpp"
 #include "Egg.hpp"
 #include "Sound.hpp"
+#include "Time.hpp"
+#include "Grid.hpp"
+#include "ServerMonitor.hpp"
 
 class	Map
 {
@@ -13,9 +16,18 @@ class	Map
 	std::vector<Sound*> _sounds;
 	glm::vec2 _size;
 	std::vector<std::vector<std::vector<int>>> _resources;
+	double _timeUnit;
+	Grid _grid;
+	ServerMonitor _serverMonitor;
+	
+	static const glm::vec2 _directions[4];
+	
+	Player	*getPlayer(int ID);
+	Egg	*getEgg(int ID);
+	
 public:
-	Map(void);
+	Map(int fd, glm::vec2 size);
 	~Map(void);
 
-	void	Update(double dt);
+	void	Render(std::pair<glm::mat4, glm::mat4> perspective, double dt);
 };
