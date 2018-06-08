@@ -74,6 +74,8 @@ _textureParser(texturePath)
 
 		_projectionID_outline = glGetUniformLocation(_outlineProgram->ID(), "projection");
 		_transformID_outline = glGetUniformLocation(_outlineProgram->ID(), "transform");
+		_colorID_outline = glGetUniformLocation(_outlineProgram->ID(), "color");
+		_sizeID_outline = glGetUniformLocation(_outlineProgram->ID(), "size");
 		_init = true;
 	}
 
@@ -150,6 +152,18 @@ void	Obj::renderBackface(std::pair<glm::mat4, glm::mat4> perspective,
 			    float size)
 {
 	_outlineProgram->Use();
+
+	glm::mat4 projection = perspective.second * perspective.first;
+	glUniformMatrix4fv(_projectionID_outline,
+			   1,
+			   GL_FALSE,
+			   glm::value_ptr(projection));
+	glUniformMatrix4fv(_transformID_outline,
+			   1,
+			   GL_FALSE,
+			   glm::value_ptr(transform));
+	glUniform3fv(_colorID_outline, 1, &color.x);
+	glUniform1f(_sizeID_outline, size);
 	
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexArrayID);
 	glEnableVertexAttribArray(0);
@@ -172,7 +186,7 @@ void	Obj::Render(std::pair<glm::mat4, glm::mat4> perspective,
 	glFrontFace(GL_CCW);
 	
 	if (outlineColor.x != -1)
-		renderBackface(perspective, transform, outlineColor, outlineSize);	
+		renderBackface(perspective, transform, outlineColor, outlineSize);
 
 	glCullFace(GL_BACK);
 	

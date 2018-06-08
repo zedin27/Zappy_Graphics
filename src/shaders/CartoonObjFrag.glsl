@@ -17,5 +17,6 @@ void	main()
 	float fog = min(pow(Data.dist, 2) / Data.fog, 1);
 	vec4 col = texture(tex, Data.uv).rgba * vec4(Data.lightMod, 1);	
 	color = col * (1 - fog) + vec4(Data.fogcol * fog, 1);
-	color = round(color / 5) * 5;
+	
+	color = round(color * 2) / 2;
 }

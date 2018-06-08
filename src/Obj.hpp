@@ -7,10 +7,10 @@
 #include "ObjFileArrayExtractor.hpp"
 
 #define STANDARD_OBJ_VERTEX "src/shaders/StandardObjVertex.glsl"
-#define OUTLINE_OBJ_VERTEX "src/shaders/StandardObjVertex.glsl"
+#define OUTLINE_OBJ_VERTEX "src/shaders/OutlineObjVertex.glsl"
 #define STANDARD_OBJ_FRAG "src/shaders/StandardObjFrag.glsl"
 #define CARTOON_OBJ_FRAG "src/shaders/CartoonObjFrag.glsl"
-#define OUTLINE_OBJ_FRAG "src/shaders/StandardObjFrag.glsl"
+#define OUTLINE_OBJ_FRAG "src/shaders/OutlineObjFrag.glsl"
 
 class	Obj
 {
