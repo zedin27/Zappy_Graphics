@@ -30,6 +30,8 @@ GLuint Obj::_materialID_cartoon;
 
 GLuint Obj::_projectionID_outline;
 GLuint Obj::_transformID_outline;
+GLuint Obj::_colorID_outline;
+GLuint Obj::_sizeID_outline;
 
 const glm::vec3 Obj::noOutline = glm::vec3(-1);
 const std::vector<glm::vec3> Obj::noOutlines;

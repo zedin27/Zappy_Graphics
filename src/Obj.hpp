@@ -49,6 +49,8 @@ class	Obj
 
 	static	GLuint _projectionID_outline;
 	static	GLuint _transformID_outline;
+	static	GLuint _colorID_outline;
+	static	GLuint _sizeID_outline;
 	
 	GLuint _textureID;
 
@@ -65,7 +67,7 @@ public:
 	
 	Obj(std::string filepath,
 	    std::string texturePath,
-	    float specular = 1,
+	    float specular = 0,
 	    float diffuse = 1,
 	    float fog = 1000000,
 	    glm::vec3 fogcol = glm::vec3(0));
