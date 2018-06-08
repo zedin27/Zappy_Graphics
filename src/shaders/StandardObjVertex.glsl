@@ -8,6 +8,7 @@ layout(location = 2) in vec2 uv;
 
 uniform mat4 transform;
 uniform mat4 projection;
+uniform mat4 lookAt;
 uniform vec3 lightPos[MAX_LIGHTS];
 uniform vec3 lightColor[MAX_LIGHTS];
 uniform float lightFalloff[MAX_LIGHTS];
@@ -23,9 +24,9 @@ out	ShapeData {
 } Data;
 
 float SPECULAR = material[0];
-float FOG = material[1];
-vec3 FOGCOL = vec3(material[2], material[3], material[4]);
-float DIFFUSE = material[5];
+float DIFFUSE = material[1];
+float FOG = material[2];
+vec3 FOGCOL = vec3(material[3], material[4], material[5]);
 
 vec3	GetLightModifier(vec3 v, vec3 n)
 {

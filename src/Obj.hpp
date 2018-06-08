@@ -14,9 +14,9 @@
 
 class	Obj
 {
-	static ShadingProgram _normalProgram;
-	static ShadingProgram _outlineProgram;
-	static ShadingProgram _cartoonProgram;
+	static ShadingProgram *_normalProgram;
+	static ShadingProgram *_outlineProgram;
+	static ShadingProgram *_cartoonProgram;
 	static bool _init;
 	
 	ObjFileArrayExtractor _extractor;
@@ -27,6 +27,7 @@ class	Obj
 	GLuint _vertexArrayID;
 	
 	static	GLuint _projectionID_normal;
+	static	GLuint _lookAtID_normal;
 	static	GLuint _transformID_normal;
 	static	GLuint _textureLocationID_normal;
 	static	GLuint _lightPosID_normal;
@@ -37,6 +38,7 @@ class	Obj
 	
 	
 	static	GLuint _projectionID_cartoon;
+	static	GLuint _lookAtID_cartoon;
 	static	GLuint _transformID_cartoon;
 	static	GLuint _textureLocationID_cartoon;
 	static	GLuint _lightPosID_cartoon;

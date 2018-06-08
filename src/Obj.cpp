@@ -3,12 +3,13 @@
 #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
 #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
 
-ShadingProgram Obj::_normalProgram(STANDARD_OBJ_VERTEX, "", STANDARD_OBJ_FRAG);
-ShadingProgram Obj::_cartoonProgram(STANDARD_OBJ_VERTEX, "", CARTOON_OBJ_FRAG);
-ShadingProgram Obj::_outlineProgram(OUTLINE_OBJ_VERTEX, "", OUTLINE_OBJ_FRAG);
+ShadingProgram *Obj::_normalProgram;
+ShadingProgram *Obj::_cartoonProgram;
+ShadingProgram *Obj::_outlineProgram;
 bool	Obj::_init = false;
 
 GLuint Obj::_projectionID_normal;
+GLuint Obj::_lookAtID_normal;
 GLuint Obj::_transformID_normal;
 GLuint Obj::_textureLocationID_normal;
 GLuint Obj::_lightPosID_normal;
@@ -18,6 +19,7 @@ GLuint Obj::_lightNumID_normal;
 GLuint Obj::_materialID_normal;
 
 GLuint Obj::_projectionID_cartoon;
+GLuint Obj::_lookAtID_cartoon;
 GLuint Obj::_transformID_cartoon;
 GLuint Obj::_textureLocationID_cartoon;
 GLuint Obj::_lightPosID_cartoon;
@@ -28,6 +30,10 @@ GLuint Obj::_materialID_cartoon;
 
 GLuint Obj::_projectionID_outline;
 GLuint Obj::_transformID_outline;
+
+const glm::vec3 Obj::noOutline = glm::vec3(-1);
+const std::vector<glm::vec3> Obj::noOutlines;
+const std::vector<float> Obj::noSize;
 
 Obj::Obj(std::string filePath,
 	 std::string texturePath,
@@ -40,31 +46,39 @@ _textureParser(texturePath)
 {
 	if (!_init)
 	{
-		_projectionID_normal = glGetUniformLocation(_normalProgram.ID(), "projection");
-		_transformID_normal = glGetUniformLocation(_normalProgram.ID(), "transform");		
-		_textureLocationID_normal = glGetUniformLocation(_normalProgram.ID(), "tex");
-		_lightPosID_normal = glGetUniformLocation(_normalProgram.ID(), "lightPos");
-		_lightColorID_normal = glGetUniformLocation(_normalProgram.ID(), "lightColor");
-		_lightFalloffID_normal = glGetUniformLocation(_normalProgram.ID(), "lightFalloff");
-		_lightNumID_normal = glGetUniformLocation(_normalProgram.ID(), "lightAmount");
-		_materialID_normal = glGetUniformLocation(_normalProgram.ID(), "material");
+		_normalProgram = new ShadingProgram(STANDARD_OBJ_VERTEX, "", STANDARD_OBJ_FRAG);
+		_cartoonProgram = new ShadingProgram(STANDARD_OBJ_VERTEX, "", CARTOON_OBJ_FRAG);
+		_outlineProgram = new ShadingProgram(OUTLINE_OBJ_VERTEX, "", OUTLINE_OBJ_FRAG);
+		
+		_projectionID_normal = glGetUniformLocation(_normalProgram->ID(), "projection");
+		_lookAtID_normal = glGetUniformLocation(_normalProgram->ID(), "lookAt");
+		_transformID_normal = glGetUniformLocation(_normalProgram->ID(), "transform");		
+		_textureLocationID_normal = glGetUniformLocation(_normalProgram->ID(), "tex");
+		_lightPosID_normal = glGetUniformLocation(_normalProgram->ID(), "lightPos");
+		_lightColorID_normal = glGetUniformLocation(_normalProgram->ID(), "lightColor");
+		_lightFalloffID_normal = glGetUniformLocation(_normalProgram->ID(), "lightFalloff");
+		_lightNumID_normal = glGetUniformLocation(_normalProgram->ID(), "lightAmount");
+		_materialID_normal = glGetUniformLocation(_normalProgram->ID(), "material");
 
-		_projectionID_cartoon = glGetUniformLocation(_cartoonProgram.ID(), "projection");
-		_transformID_cartoon = glGetUniformLocation(_cartoonProgram.ID(), "transform");
-		_textureLocationID_cartoon = glGetUniformLocation(_cartoonProgram.ID(), "tex");
-		_lightPosID_cartoon = glGetUniformLocation(_cartoonProgram.ID(), "lightPos");
-		_lightColorID_cartoon = glGetUniformLocation(_cartoonProgram.ID(), "lightColor");
-		_lightFalloffID_cartoon = glGetUniformLocation(_cartoonProgram.ID(), "lightFalloff");
-		_lightNumID_cartoon = glGetUniformLocation(_cartoonProgram.ID(), "lightAmount");
-		_materialID_cartoon = glGetUniformLocation(_cartoonProgram.ID(), "material");
+		_projectionID_cartoon = glGetUniformLocation(_cartoonProgram->ID(), "projection");
+		_lookAtID_cartoon = glGetUniformLocation(_cartoonProgram->ID(), "lookAt");
+		_transformID_cartoon = glGetUniformLocation(_cartoonProgram->ID(), "transform");
+		_textureLocationID_cartoon = glGetUniformLocation(_cartoonProgram->ID(), "tex");
+		_lightPosID_cartoon = glGetUniformLocation(_cartoonProgram->ID(), "lightPos");
+		_lightColorID_cartoon = glGetUniformLocation(_cartoonProgram->ID(), "lightColor");
+		_lightFalloffID_cartoon = glGetUniformLocation(_cartoonProgram->ID(), "lightFalloff");
+		_lightNumID_cartoon = glGetUniformLocation(_cartoonProgram->ID(), "lightAmount");
+		_materialID_cartoon = glGetUniformLocation(_cartoonProgram->ID(), "material");
 
-		_projectionID_outline = glGetUniformLocation(_outlineProgram.ID(), "projection");
-		_transformID_outline = glGetUniformLocation(_outlineProgram.ID(), "transform");
+		_projectionID_outline = glGetUniformLocation(_outlineProgram->ID(), "projection");
+		_transformID_outline = glGetUniformLocation(_outlineProgram->ID(), "transform");
 		_init = true;
 	}
-	
+
 	float material[6] = {specular, diffuse, fog, fogcol.x, fogcol.y, fogcol.z};
+	_normalProgram->Use();
 	glUniform1fv(_materialID_normal, 6, material);
+	_cartoonProgram->Use();
 	glUniform1fv(_materialID_cartoon, 6, material);
 
 	glGenBuffers(1, &_uvArrayID);
@@ -122,6 +136,10 @@ Obj::~Obj(void)
 	glDeleteBuffers(1, &_vertexArrayID);
 
 	glDeleteTextures(1, &_textureID);
+
+	delete _normalProgram;
+	delete _outlineProgram;
+	delete _cartoonProgram;
 }
 
 void	Obj::renderBackface(std::pair<glm::mat4, glm::mat4> perspective,
@@ -129,7 +147,7 @@ void	Obj::renderBackface(std::pair<glm::mat4, glm::mat4> perspective,
 			    glm::vec3 color,
 			    float size)
 {
-	_outlineProgram.Use();
+	_outlineProgram->Use();
 	
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexArrayID);
 	glEnableVertexAttribArray(0);
@@ -149,7 +167,7 @@ void	Obj::Render(std::pair<glm::mat4, glm::mat4> perspective,
 		    bool cartoon)
 {
 	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CW);
+	glFrontFace(GL_CCW);
 	
 	if (outlineColor.x != -1)
 		renderBackface(perspective, transform, outlineColor, outlineSize);	
@@ -159,21 +177,27 @@ void	Obj::Render(std::pair<glm::mat4, glm::mat4> perspective,
 	GLuint textureLocation[2] = {_textureLocationID_normal, _textureLocationID_cartoon};
 	GLuint transformLocation[2] = {_transformID_normal, _transformID_cartoon};
 	GLuint projectionLocation[2] = {_projectionID_normal, _projectionID_cartoon};
+	GLuint lookAtLocation[2] = {_lookAtID_normal, _lookAtID_cartoon};
 	GLuint lightPos[2] = {_lightPosID_normal, _lightPosID_cartoon};
 	GLuint lightColor[2] = {_lightColorID_normal, _lightColorID_cartoon};
 	GLuint lightFalloff[2] = {_lightFalloffID_normal, _lightFalloffID_cartoon};
 	GLuint lightNum[2] = {_lightNumID_normal, _lightNumID_cartoon};
 	
 	if (cartoon)
-		_cartoonProgram.Use();
+		_cartoonProgram->Use();
 	else
-		_normalProgram.Use();
+		_normalProgram->Use();
 
-	glm::mat4 projection = perspective.second * perspective.first;
 	glUniformMatrix4fv(projectionLocation[cartoon],
 			   1,
 			   GL_FALSE,
-			   glm::value_ptr(projection));
+			   glm::value_ptr(perspective.second));
+
+	glUniformMatrix4fv(lookAtLocation[cartoon],
+			   1,
+			   GL_FALSE,
+			   glm::value_ptr(perspective.first));
+	
 	glUniformMatrix4fv(transformLocation[cartoon],
 			   1,
 			   GL_FALSE,
