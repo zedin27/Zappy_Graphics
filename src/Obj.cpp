@@ -168,12 +168,17 @@ void	Obj::renderBackface(std::pair<glm::mat4, glm::mat4> perspective,
 	glBindBuffer(GL_ARRAY_BUFFER, _vertexArrayID);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, _normalArrayID);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	
 	glCullFace(GL_FRONT);
 	
 	glDrawArrays(GL_TRIANGLES, 0, _extractor.GetVertices().size() / 3);
 
 	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 }
 
 void	Obj::Render(std::pair<glm::mat4, glm::mat4> perspective,
