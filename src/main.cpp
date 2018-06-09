@@ -28,8 +28,6 @@ int	main(void)
 		   "assets/textures/skybox/front.png",
 		   "assets/textures/skybox/back.png");
 
-//	Obj obj("assets/meshes/fullface.obj", "assets/textures/white.png");
-
 	glClearColor(0.2, 0.25, 0.3, 1);
 
 	while (!window.ShouldClose())
@@ -43,8 +41,6 @@ int	main(void)
 		cam.Update();
 
 		sky.Render(cam.Perspective());
-//		obj.Render(cam.Perspective(), glm::mat4(1), glm::vec3(0, 0, 0), 0.005, false);
-		
 		map.Render(cam.Perspective(), clock.Delta());
 
 		fps.Render();

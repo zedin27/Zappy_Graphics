@@ -140,10 +140,6 @@ Obj::~Obj(void)
 	glDeleteBuffers(1, &_vertexArrayID);
 
 	glDeleteTextures(1, &_textureID);
-
-	delete _normalProgram;
-	delete _outlineProgram;
-	delete _cartoonProgram;
 }
 
 void	Obj::renderBackface(std::pair<glm::mat4, glm::mat4> perspective,
