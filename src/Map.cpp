@@ -2,8 +2,6 @@
 
 const glm::vec2 Map::_directions[4] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
-//FIXME: Lambda expressions that has the Player class will be changed. Check before testing
-
 Player	*Map::getPlayer(int ID)
 {
 	for (size_t i = 0; i < _players.size(); i++)
@@ -26,17 +24,8 @@ Egg	*Map::getEgg(int ID)
 	return nullptr;
 }
 
-Map::Map(int fd, glm::vec2 size) : _size(size), _grid(size.x, size.y), _serverMonitor(fd)
+Map::Map(int fd) : _size(glm::vec2(0, 0)), _grid(10, 10), _serverMonitor(fd)
 {
-
-	_resources.resize(size.x);
-	for (auto &v : _resources)
-	{
-		v.resize(size.y);
-		for (auto &r : v)
-			r.resize(7);
-	}
-	
 	// [this] is basically calling every member from the class Map
 	_events["ppo"] = [this](std::string data)
 	{
@@ -47,7 +36,7 @@ Map::Map(int fd, glm::vec2 size) : _size(size), _grid(size.x, size.y), _serverMo
 		std::stringstream ss;
 		ss << data; //Putting in my data string
 
-		ss >> playerID >> pos.x >> pos.y >> orientation; //Taking out my data string (Hint: whitespaces are important!)
+		ss >> playerID >> pos.x >> pos.y >> orientation;
 
 		//change player position
 		Player *p = getPlayer(playerID);
@@ -268,6 +257,29 @@ Map::Map(int fd, glm::vec2 size) : _size(size), _grid(size.x, size.y), _serverMo
 
 		ss >> team_name;
 	};
+
+	while (_size.x == 0)
+	{
+		_serverMonitor.Update();
+		const std::vector<const std::string>& commands = _serverMonitor.Commands();
+		const std::vector<const std::string>& data = _serverMonitor.Data();
+
+		for (size_t i = 0; i < commands.size(); i++)
+		{
+			if (_events.count(commands[i]) != 0)
+				_events[commands[i]](data[i]);
+			if (_size.x != 0)
+			{
+				_resources.resize(_size.x);
+				for (auto &v : _resources)
+				{
+					v.resize(_size.y);
+					for (auto &r : v)
+						r.resize(7);
+				}
+			}
+		}
+        }
 }
 
 Map::~Map(void)

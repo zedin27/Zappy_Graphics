@@ -44,11 +44,11 @@ int	main(int argc, char *argv[])
 	if (argc <= 2
 	    || ((clientfd = client_socket(argv[1], atoi(argv[2]))) == -1))
 		return (EXIT_FAILURE);
-	std::cout << clientfd << std::endl;
+
 	Window window(1600, 900, "zap");
 	FreeCamera cam(window);
 	Light light(glm::vec3(1000, 1000, 0), glm::vec3(1, 1, 1), 1000000);
-	Map map(clientfd, glm::vec2(25, 25));
+	Map map(clientfd);
 	Time clock;
 	FPSDisplay fps;
 	SkyBox sky("assets/textures/skybox/right.png",
@@ -58,13 +58,11 @@ int	main(int argc, char *argv[])
 		   "assets/textures/skybox/front.png",
 		   "assets/textures/skybox/back.png");
 
-	char buf[11];
+	char buf[10];
 	int lol = read(clientfd, buf, 10);
-	buf[lol] = '\0';
-	std::cout << "buf " << buf << std::endl;
 	write(clientfd, "GRAPHIC\n", 8);
+	
 	glClearColor(0.2, 0.25, 0.3, 1);
-
 	while (!window.ShouldClose())
 	{
 		window.Clear();

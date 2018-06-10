@@ -26,7 +26,7 @@ class	Map
 	Egg	*getEgg(int ID);
 	
 public:
-	Map(int fd, glm::vec2 size);
+	Map(int fd);
 	~Map(void);
 
 	void	Render(std::pair<glm::mat4, glm::mat4> perspective, double dt);
