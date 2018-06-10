@@ -92,6 +92,16 @@ _mapSize(mapSize)
 Player::~Player(void)
 {
 	delete _model;
+
+	uint64_t key = keyHash(_modelPos);
+	if (_staticPlayers.count(key) == 0)
+		return;
+	std::list<Player*> &l = _staticPlayers[key];
+	auto iter = std::find(l.begin(), l.end(), this);
+	l.erase(iter);
+	if (l.empty())
+		_staticPlayers.erase(key);
+	spaceOutPlayers(key);
 }
 
 void	Player::MoveTo(glm::vec2 pos)
