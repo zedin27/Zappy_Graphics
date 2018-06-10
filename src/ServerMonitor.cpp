@@ -23,18 +23,18 @@ void	ServerMonitor::Update(void)
 		
 	_tv.tv_sec = 0;
 	_tv.tv_usec = 0;
-	char buf[10000];	
+	char buf[100000];	
 	if (FD_ISSET(_fd, &_rfds))
 	{
-		int bytes_read = read(_fd, buf, 9999); //shhh, no one needs to know
-		assert(bytes_read < 9999);
+		int bytes_read = read(_fd, buf, 99999); //shhh, no one needs to know
+		assert(bytes_read < 99999);
 		buf[bytes_read] = '\0';
 
 		std::stringstream ss((std::string(buf)));
 
 		for (std::string line; std::getline(ss, line);)
 		{
-			std::cout << line << std::endl;
+//			std::cout << line << std::endl;
 			size_t delim = line.find(' ');
 			_commands.push_back(line.substr(0, delim));
 			_data.push_back(line.substr(delim + 1));

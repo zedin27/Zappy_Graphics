@@ -47,7 +47,7 @@ int	main(int argc, char *argv[])
 
 	Window window(1600, 900, "zap");
 	FreeCamera cam(window);
-	Light light(glm::vec3(1000, 1000, 0), glm::vec3(1, 1, 1), 1000000);
+	Light light(glm::vec3(0, 100, 0), glm::vec3(1, 1, 0.2), 100);
 	Map map(clientfd);
 	Time clock;
 	FPSDisplay fps;

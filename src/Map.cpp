@@ -24,7 +24,7 @@ Egg	*Map::getEgg(int ID)
 	return nullptr;
 }
 
-Map::Map(int fd) : _size(glm::vec2(0, 0)), _grid(10, 10), _serverMonitor(fd)
+Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 {
 	// [this] is basically calling every member from the class Map
 	_events["ppo"] = [this](std::string data)
@@ -74,7 +74,6 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _grid(10, 10), _serverMonitor(fd)
 		std::stringstream ss;
 		ss << data;
 		ss >> x >> y;
-		std::cout << "x: " << x << "y: " << y << std::endl;
 		for (auto& q : quantity)
 			ss >> q;
 		for (int i = 0; i < _resources[x][y].size(); i++)
@@ -100,6 +99,14 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _grid(10, 10), _serverMonitor(fd)
 		ss >> x >> y;
 		_size.x = x;
 		_size.y = y;
+		
+		_resources.resize(_size.x);
+		for (auto &v : _resources)
+		{
+			v.resize(_size.y);
+			for (auto &r : v)
+				r.resize(7);
+		}
 	};
 	
 	_events["enw"] = [this](std::string data) //add an egg from the player
@@ -132,6 +139,8 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _grid(10, 10), _serverMonitor(fd)
 		resources[resource] += 1;
 		
 		Player *p = getPlayer(playerID);
+		glm::vec2 pos = glm::round(p->GetPosition());
+		_resources[(size_t)pos.x][(size_t)pos.y][resource] -= 1;		
 		p->PickUp(resources);
 	};
 
@@ -257,29 +266,6 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _grid(10, 10), _serverMonitor(fd)
 
 		ss >> team_name;
 	};
-
-	while (_size.x == 0)
-	{
-		_serverMonitor.Update();
-		const std::vector<const std::string>& commands = _serverMonitor.Commands();
-		const std::vector<const std::string>& data = _serverMonitor.Data();
-
-		for (size_t i = 0; i < commands.size(); i++)
-		{
-			if (_events.count(commands[i]) != 0)
-				_events[commands[i]](data[i]);
-			if (_size.x != 0)
-			{
-				_resources.resize(_size.x);
-				for (auto &v : _resources)
-				{
-					v.resize(_size.y);
-					for (auto &r : v)
-						r.resize(7);
-				}
-			}
-		}
-        }
 }
 
 Map::~Map(void)
@@ -314,7 +300,11 @@ void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 	{
 		e->Render(perspective);
 	}
+	
+	for (int x = 0; x < _size.x; x++)
+		for (int y = 0; y < _size.y; y++)
+			_resourceRenderer.Render(perspective, glm::vec2(x, y), _resources[x][y]);
 
-	_grid.Render(perspective);
+	_grid.Render(perspective, _size);
 }
 

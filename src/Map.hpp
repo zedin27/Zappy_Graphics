@@ -7,6 +7,7 @@
 #include "Time.hpp"
 #include "Grid.hpp"
 #include "ServerMonitor.hpp"
+#include "ResourceRenderer.hpp"
 
 class	Map
 {
@@ -19,6 +20,7 @@ class	Map
 	double _timeUnit;
 	Grid _grid;
 	ServerMonitor _serverMonitor;
+	ResourceRenderer _resourceRenderer;
 	
 	static const glm::vec2 _directions[4];
 	

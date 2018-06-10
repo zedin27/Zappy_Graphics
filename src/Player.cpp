@@ -161,6 +161,11 @@ int	Player::ID(void)
 	return _ID;
 }
 
+glm::vec2	Player::GetPosition(void)
+{
+	return _pos;
+}
+
 void	Player::Update(double dt)
 {
 

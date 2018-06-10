@@ -30,7 +30,8 @@ FreeCamera \
 SkyBox \
 Grid \
 FPSDisplay \
-ServerMonitor
+ServerMonitor \
+ResourceRenderer
 
 SRC_DIR = src
 OBJ_DIR = obj
