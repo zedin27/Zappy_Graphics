@@ -2,8 +2,6 @@
 
 const glm::vec2 Map::_directions[4] = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
 
-//FIXME: Lambda expressions that has the Player class will be changed. Check before testing
-
 Player	*Map::getPlayer(int ID)
 {
 	for (size_t i = 0; i < _players.size(); i++)
@@ -26,7 +24,7 @@ Egg	*Map::getEgg(int ID)
 	return nullptr;
 }
 
-Map::Map(int fd, glm::vec2 size) : _size(size), _grid(size.x, size.y), _serverMonitor(fd)
+Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 {
 	// [this] is basically calling every member from the class Map
 	_events["ppo"] = [this](std::string data)
@@ -38,7 +36,7 @@ Map::Map(int fd, glm::vec2 size) : _size(size), _grid(size.x, size.y), _serverMo
 		std::stringstream ss;
 		ss << data; //Putting in my data string
 
-		ss >> playerID >> pos.x >> pos.y >> orientation; //Taking out my data string (Hint: whitespaces are important!)
+		ss >> playerID >> pos.x >> pos.y >> orientation;
 
 		//change player position
 		Player *p = getPlayer(playerID);
@@ -101,6 +99,14 @@ Map::Map(int fd, glm::vec2 size) : _size(size), _grid(size.x, size.y), _serverMo
 		ss >> x >> y;
 		_size.x = x;
 		_size.y = y;
+		
+		_resources.resize(_size.x);
+		for (auto &v : _resources)
+		{
+			v.resize(_size.y);
+			for (auto &r : v)
+				r.resize(7);
+		}
 	};
 	
 	_events["enw"] = [this](std::string data) //add an egg from the player
@@ -133,6 +139,8 @@ Map::Map(int fd, glm::vec2 size) : _size(size), _grid(size.x, size.y), _serverMo
 		resources[resource] += 1;
 		
 		Player *p = getPlayer(playerID);
+		glm::vec2 pos = glm::round(p->GetPosition());
+		_resources[(size_t)pos.x][(size_t)pos.y][resource] -= 1;		
 		p->PickUp(resources);
 	};
 
@@ -292,7 +300,11 @@ void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 	{
 		e->Render(perspective);
 	}
+	
+	for (int x = 0; x < _size.x; x++)
+		for (int y = 0; y < _size.y; y++)
+			_resourceRenderer.Render(perspective, glm::vec2(x, y), _resources[x][y]);
 
-	_grid.Render(perspective);
+	_grid.Render(perspective, _size);
 }
 

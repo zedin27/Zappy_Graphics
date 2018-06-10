@@ -7,6 +7,7 @@
 #include "Time.hpp"
 #include "Grid.hpp"
 #include "ServerMonitor.hpp"
+#include "ResourceRenderer.hpp"
 
 class	Map
 {
@@ -19,6 +20,7 @@ class	Map
 	double _timeUnit;
 	Grid _grid;
 	ServerMonitor _serverMonitor;
+	ResourceRenderer _resourceRenderer;
 	
 	static const glm::vec2 _directions[4];
 	
@@ -26,7 +28,7 @@ class	Map
 	Egg	*getEgg(int ID);
 	
 public:
-	Map(int fd, glm::vec2 size);
+	Map(int fd);
 	~Map(void);
 
 	void	Render(std::pair<glm::mat4, glm::mat4> perspective, double dt);

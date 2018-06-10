@@ -5,12 +5,10 @@
 
 class	Grid
 {
-	int _x;
-	int _y;
 	Model *_model;
 public:
-	Grid(int x, int y);
+	Grid(void);
 	~Grid(void);
 
-	void	Render(std::pair<glm::mat4, glm::mat4> perspective);
+	void	Render(std::pair<glm::mat4, glm::mat4> perspective, glm::vec2 size);
 };

@@ -45,6 +45,7 @@ public:
 	const std::string&	Name(void);
 	int	ID(void);
 
+	glm::vec2	GetPosition(void);
 	void	Update(double dt);
 	void	Render(std::pair<glm::mat4, glm::mat4> perspective);
 };
