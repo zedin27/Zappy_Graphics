@@ -14,8 +14,15 @@ void	ServerMonitor::Update(void)
 	//clear the previous frames commands + data
 	_commands.clear();
 	_data.clear();
-
-	//read the server fd, taking care to not get blocked
+	FD_ZERO(&_rfds); // ask adam about this maybe
+	FD_SET(_fd, &_rfds);
+	
+	//read the server fd, taking care to not get blocked	
+	if (select(_fd + 1, &_rfds, NULL, NULL, &_tv) < 0)
+		std::cout << "negative" << std::endl;
+		
+	_tv.tv_sec = 0;
+	_tv.tv_usec = 0;
 	char buf[10000];	
 	if (FD_ISSET(_fd, &_rfds))
 	{
@@ -27,6 +34,7 @@ void	ServerMonitor::Update(void)
 
 		for (std::string line; std::getline(ss, line);)
 		{
+			std::cout << line << std::endl;
 			size_t delim = line.find(' ');
 			_commands.push_back(line.substr(0, delim));
 			_data.push_back(line.substr(delim + 1));

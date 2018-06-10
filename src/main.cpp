@@ -22,15 +22,18 @@ int client_socket(char *ip, uint16_t port)
 	
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 6)) == -1)
 		return (-1);
+
+	std::cout << sockfd << std::endl;
 	client_addr.sin_family = AF_INET;
 	client_addr.sin_port = htons(port);
 	if ((client_addr.sin_addr.s_addr = inet_addr(ip)) == (in_addr_t)-1)
     return (-1);
 	if (connect(sockfd, (struct sockaddr*)&client_addr, sizeof(struct sockaddr_in)) == -1)
 	{
-		printf("No bueno %s\n", strerror(errno));
+		printf("No bueno %s\n", strerror(errno));		
 		return (-1);
 	}
+	std::cout << sockfd << std::endl;
 	return (sockfd);
 }
 
@@ -39,8 +42,9 @@ int	main(int argc, char *argv[])
 	int	clientfd;
 		
 	if (argc <= 2
-		|| (clientfd = client_socket(argv[1], atoi(argv[2])) == -1))
+	    || ((clientfd = client_socket(argv[1], atoi(argv[2]))) == -1))
 		return (EXIT_FAILURE);
+	std::cout << clientfd << std::endl;
 	Window window(1600, 900, "zap");
 	FreeCamera cam(window);
 	Light light(glm::vec3(1000, 1000, 0), glm::vec3(1, 1, 1), 1000000);
@@ -54,6 +58,11 @@ int	main(int argc, char *argv[])
 		   "assets/textures/skybox/front.png",
 		   "assets/textures/skybox/back.png");
 
+	char buf[11];
+	int lol = read(clientfd, buf, 10);
+	buf[lol] = '\0';
+	std::cout << "buf " << buf << std::endl;
+	write(clientfd, "GRAPHIC\n", 8);
 	glClearColor(0.2, 0.25, 0.3, 1);
 
 	while (!window.ShouldClose())

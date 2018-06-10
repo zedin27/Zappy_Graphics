@@ -28,6 +28,15 @@ Egg	*Map::getEgg(int ID)
 
 Map::Map(int fd, glm::vec2 size) : _size(size), _grid(size.x, size.y), _serverMonitor(fd)
 {
+
+	_resources.resize(size.x);
+	for (auto &v : _resources)
+	{
+		v.resize(size.y);
+		for (auto &r : v)
+			r.resize(7);
+	}
+	
 	// [this] is basically calling every member from the class Map
 	_events["ppo"] = [this](std::string data)
 	{
@@ -76,6 +85,7 @@ Map::Map(int fd, glm::vec2 size) : _size(size), _grid(size.x, size.y), _serverMo
 		std::stringstream ss;
 		ss << data;
 		ss >> x >> y;
+		std::cout << "x: " << x << "y: " << y << std::endl;
 		for (auto& q : quantity)
 			ss >> q;
 		for (int i = 0; i < _resources[x][y].size(); i++)

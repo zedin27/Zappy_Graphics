@@ -43,10 +43,12 @@ $(shell pkg-config --cflags glfw3 glm) \
 -I lib/entt/src \
 -I lib/lodepng \
 -g -O3 -march=native \
+-fsanitize=address
 
 LDFLAGS = -framework OpenGl \
 $(shell pkg-config --libs glfw3 glm) \
 -L lib/lodepng -llodepng \
+-fsanitize=address
 
 all: $(OBJ_DIR) $(NAME)
 
