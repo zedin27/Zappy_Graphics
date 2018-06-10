@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "ObjFile.hpp"
+#include "Obj.hpp"
 #include "Time.hpp"
 
 class	Model
@@ -28,7 +28,7 @@ public:
 private:
 	struct	AnimatedPart
 	{
-		ObjFile *object;
+		Obj *object;
 		std::vector<glm::mat4> animaTransform;
 		std::vector<float> animaTime;
 		float animaCycle;
@@ -40,17 +40,9 @@ private:
 	Time _time;
 	std::vector<AnimatedPart> _parts;
 	float _totalTime;
-	std::pair<glm::mat4, glm::mat4> _perspective;
-	glm::mat4 _transform;
-	glm::vec3 _pos;
 
 	
 	glm::mat4	InterpolateMatrix(AnimatedPart part);
-	
-        void    UsePerspective(std::pair<glm::mat4, glm::mat4>);
-        void    SetTransform(glm::mat4);
-        void    MoveTo(glm::vec3);
-	void	Render(void);
 	
 public:
 
@@ -58,7 +50,10 @@ public:
 	~Model(void);
 	void	Render(std::pair<glm::mat4, glm::mat4> perspective,
 		       glm::mat4 transform,
-		       glm::vec3 position);
+		       glm::vec3 position,
+		       glm::vec3 outlineColor = Obj::noOutline,
+		       float outlineSize = 0.2,
+		       bool cartoon = false);
 };
 
 std::istream	&operator >> (std::istream &is, Model::AnimatedPartRaw &lhs);

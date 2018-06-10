@@ -59,13 +59,14 @@ Model::Model(std::string filepath)
 		processed.animaTime = raw.time;
 		processed.animaCycle = raw.cycle;
 		processed.partPos = raw.pos;
-		processed.object = new ObjFile(absolutePath + "/" + raw.objectFile,
-						     absolutePath + "/" + raw.textureFile);
-		processed.object->UseMaterial(raw.specular, raw.fog, raw.fogcol, raw.diffuse);
+		processed.object = new Obj(absolutePath + "/" + raw.objectFile,
+					   absolutePath + "/" + raw.textureFile,
+					   raw.specular,
+					   raw.diffuse,
+					   raw.fog,
+					   raw.fogcol);
 		_parts.push_back(processed);
 	}
-	_pos = glm::vec3(0, 0, 0);
-	_transform = glm::mat4(1);
 	_totalTime = 0;
 }
 
@@ -73,21 +74,6 @@ Model::~Model(void)
 {
 	for (auto part : _parts)
 		delete part.object;
-}
-
-void	Model::UsePerspective(std::pair<glm::mat4, glm::mat4> p)
-{
-	_perspective = p;
-}
-
-void	Model::SetTransform(glm::mat4 m)
-{
-	_transform = m;
-}
-
-void	Model::MoveTo(glm::vec3 p)
-{
-	_pos = p;
 }
 
 glm::mat4	Model::InterpolateMatrix(AnimatedPart part)
@@ -126,29 +112,24 @@ glm::mat4	Model::InterpolateMatrix(AnimatedPart part)
 	return x + z * ratio;
 }
 
-void	Model::Render(void)
+void	Model::Render(std::pair<glm::mat4, glm::mat4> per,
+		      glm::mat4 t,
+		      glm::vec3 p,
+		      glm::vec3 outlineCol,
+		      float outlineSize,
+		      bool cartoon)
 {
 	_time.Step();
-
-	for (unsigned i = 0; i < _parts.size(); i++)
+	
+	for (size_t i = 0; i < _parts.size(); i++)
 	{
 		glm::mat4 matrix = InterpolateMatrix(_parts[i]);
 		glm::mat4 translate1 = glm::translate(_parts[i].partPos);
-		glm::mat4 translate2 = glm::translate(_pos);
+		glm::mat4 translate2 = glm::translate(p);
 
-		matrix = translate2 * _transform * translate1 *	matrix;
+		matrix = translate2 * t * translate1 * matrix;
 
-		_parts[i].object->SetTransform(matrix);
-		_parts[i].object->UsePerspective(_perspective);
-		_parts[i].object->Render();
+		_parts[i].object->Render(per, matrix, outlineCol, outlineSize, cartoon);
 	}
 	_totalTime += _time.Delta();
-}
-
-void	Model::Render(std::pair<glm::mat4, glm::mat4> per, glm::mat4 t, glm::vec3 p)
-{
-	UsePerspective(per);
-	SetTransform(t);
-	MoveTo(p);
-	Render();
 }

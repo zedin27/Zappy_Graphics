@@ -1,17 +1,25 @@
-
 #pragma once
 
 #include <cstring>
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include "lodepng.h"
 
 class	Texture
 {
 private:
-	
-	std::vector<unsigned char> _imageData;
+
+	struct TextureInfo
+	{
+		std::vector<unsigned char> *data;
+		unsigned width;
+		unsigned height;
+	};
+
+	static std::map<std::string, TextureInfo> _cache;
+	std::vector<unsigned char> *_imageData;
 	unsigned _width;
 	unsigned _height;
 	
