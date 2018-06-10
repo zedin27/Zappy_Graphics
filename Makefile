@@ -17,7 +17,7 @@ Time \
 ShadingProgram \
 Sprite2D \
 ObjFileArrayExtractor \
-ObjFile \
+Obj \
 Texture \
 Model \
 Light \
