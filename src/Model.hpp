@@ -52,7 +52,7 @@ public:
 		       glm::mat4 transform,
 		       glm::vec3 position,
 		       glm::vec3 outlineColor = Obj::noOutline,
-		       float outlineSize = 0.02,
+		       float outlineSize = 0.2,
 		       bool cartoon = false);
 };
 
