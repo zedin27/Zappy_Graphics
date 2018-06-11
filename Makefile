@@ -31,7 +31,8 @@ SkyBox \
 Grid \
 FPSDisplay \
 ServerMonitor \
-ResourceRenderer
+ResourceRenderer \
+Character3D
 
 SRC_DIR = src
 OBJ_DIR = obj
