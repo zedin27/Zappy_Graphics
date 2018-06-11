@@ -2,6 +2,7 @@
 
 #include "zappy.hpp"
 #include "Model.hpp"
+#include "Character3D.hpp"
 
 class	Player
 {

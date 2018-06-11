@@ -216,4 +216,13 @@ void	Player::Render(std::pair<glm::mat4, glm::mat4> perspective)
 
 	glm::mat4 rot = glm::rotate(angle, glm::vec3(0, 1, 0));
 	_model->Render(perspective, rot, glm::vec3(_modelPos.x, _height * 0.5, -_modelPos.y));
+
+	Character3D c;
+	c.Render(perspective,
+		 glm::vec3(_modelPos.x - 0.1,
+			   _height * 0.5 + 0.4,
+			   -_modelPos.y),
+		 glm::vec3(1, 0, 0),
+		 0.1,
+		 _level + '0');
 }
