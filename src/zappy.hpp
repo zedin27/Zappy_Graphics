@@ -3,6 +3,8 @@
 #define GLFW_INCLUDE_GLCOREARB
 #include <GLFW/glfw3.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <iostream>
 #include <string>
 #include <sstream>
