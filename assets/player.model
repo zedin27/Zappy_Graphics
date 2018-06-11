@@ -1,4 +1,4 @@
-meshes/block.obj
+meshes/testingsmoothing.obj
 textures/grey.png
 
 	Material:
@@ -30,28 +30,3 @@ textures/grey.png
 
 	Position:
 	0 0 0
-
-meshes/block.obj
-textures/grey.png
-
-	Material:
-        0 specular
-        1 diffuse
-        4000 fog
-        0 0 0 fogcol
-
-	Transform:
-
-	matrix
-	0.2 0 0 0
-	0 0.2 0 0
-	0 0 0.2 0
-	0 0 0 1
-
-	0.0
-
-	Cycle:
-	1.0
-
-	Position:
-	0.4 0 0
