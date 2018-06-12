@@ -256,7 +256,6 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 		}
 	};
 
-	//CURRENT
 	_events["seg"] = [this](std::string data) //IGNORE: game is over (true/false of the map)
 	{
 		std::string team_name;
