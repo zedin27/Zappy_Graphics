@@ -66,6 +66,9 @@ int	main(int argc, char *argv[])
 	glClearColor(0.2, 0.25, 0.3, 1);
 	while (!window.ShouldClose())
 	{
+		GLenum err;
+		if ((err = glGetError()) != GL_NO_ERROR)
+			std::cerr << err << std::endl;
 		window.Clear();		
 		clock.Step();
 		cam.Update();

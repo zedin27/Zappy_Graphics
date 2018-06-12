@@ -47,6 +47,7 @@ void	Player::startMoving(void)
 	{
 		std::list<Player*> &l = _staticPlayers[key];
 		auto iter = std::find(l.begin(), l.end(), this);
+		assert(iter != l.end());
 		l.erase(iter);
 		if (l.empty())
 			_staticPlayers.erase(key);
@@ -98,7 +99,8 @@ Player::~Player(void)
 		return;
 	std::list<Player*> &l = _staticPlayers[key];
 	auto iter = std::find(l.begin(), l.end(), this);
-	l.erase(iter);
+	if (iter != l.end())
+		l.erase(iter);
 	if (l.empty())
 		_staticPlayers.erase(key);
 	spaceOutPlayers(key);
@@ -219,10 +221,10 @@ void	Player::Render(std::pair<glm::mat4, glm::mat4> perspective)
 
 	Character3D c;
 	c.Render(perspective,
-		 glm::vec3(_modelPos.x - 0.1,
-			   _height * 0.5 + 0.4,
+		 glm::vec3(_modelPos.x ,
+			   _height * 0.5 + 0.6,
 			   -_modelPos.y),
 		 glm::vec3(1, 0, 0),
-		 0.1,
+		 0.02,
 		 _level + '0');
 }

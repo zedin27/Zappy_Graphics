@@ -169,6 +169,9 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 		ss << data;
 
 		ss >> playerID >> message;
+		Player *p = getPlayer(playerID);
+		glm::vec2 pos = glm::round(p->GetPosition());
+		Sound::AddSound(pos, message);
 	};
 
 	_events["pic"] = [this](std::string data) // IGNORE: a ritual happens on square (with the force idea?)
@@ -274,8 +277,6 @@ Map::~Map(void)
 		delete p;
 	for (auto e : _eggs)
 		delete e;
-	for (auto s : _sounds)
-		delete s;
 }
 
 void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
@@ -290,12 +291,6 @@ void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 			_events[commands[i]](data[i]);
 	}
 	
-	for (Player *p : _players)
-	{
-		p->Update(dt);
-		p->Render(perspective);
-	}
-
 	for (Egg *e : _eggs)
 	{
 		e->Render(perspective);
@@ -306,5 +301,11 @@ void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 			_resourceRenderer.Render(perspective, glm::vec2(x, y), _resources[x][y]);
 
 	_grid.Render(perspective, _size);
-}
 
+	for (Player *p : _players)
+	{
+		p->Update(dt);
+		p->Render(perspective);
+	}
+	Sound::Render(perspective, dt);
+}

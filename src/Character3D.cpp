@@ -27,8 +27,8 @@ Character3D::Character3D(void)
 	_square.resize(18);
 	_uv.resize(12);
 
-	glm::vec2 topleft(-1, 1);
-	glm::vec2 botright(1, -1);
+	glm::vec2 topleft(-0.5, 0.5);
+	glm::vec2 botright(0.5, -0.5);
 	
 	_square[0] = topleft.x; _square[1] = topleft.y; _square[2] = 0;
 	_square[3] = topleft.x; _square[4] = botright.y; _square[5] = 0;
@@ -118,6 +118,9 @@ void	Character3D::Render(std::pair<glm::mat4, glm::mat4> perspective,
 	_uv[8] = botrightUV.x; _uv[9] = topleftUV.y;
 	_uv[10] = botrightUV.x; _uv[11] = botrightUV.y;
 
+	glBindTexture(GL_TEXTURE_2D, _textureID);
+	glActiveTexture(GL_TEXTURE0);
+	
 	glBindBuffer(GL_ARRAY_BUFFER, _squareID);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
