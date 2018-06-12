@@ -51,9 +51,9 @@ public:
 	void	Render(std::pair<glm::mat4, glm::mat4> perspective,
 		       glm::mat4 transform,
 		       glm::vec3 position,
-		       glm::vec3 outlineColor = Obj::noOutline,
-		       float outlineSize = 0.2,
-		       bool cartoon = false);
+		       glm::vec3 outlineColor = glm::vec3(1, 1, 1),
+		       float outlineSize = 0.005,
+		       bool cartoon = true);
 };
 
 std::istream	&operator >> (std::istream &is, Model::AnimatedPartRaw &lhs);
