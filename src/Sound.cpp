@@ -15,14 +15,12 @@ static uint64_t	getKey(glm::vec2 pos)
 
 void	Sound::update(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 {
-	Character3D c;
-
-	c.Render(perspective, glm::vec3(_pos.x, _timeLeft + 1 + 2, -_pos.y), glm::vec3(0, 0, 0), 0.1, 'H');
-	c.Render(perspective, glm::vec3(_pos.x, _timeLeft + 1 + 1.6, -_pos.y), glm::vec3(0, 0, 0), 0.1, 'e');
-	c.Render(perspective, glm::vec3(_pos.x, _timeLeft + 1 + 1.2, -_pos.y), glm::vec3(0, 0, 0), 0.1, 'l');
-	c.Render(perspective, glm::vec3(_pos.x, _timeLeft + 1 + 0.8, -_pos.y), glm::vec3(0, 0, 0), 0.1, 'l');
-	c.Render(perspective, glm::vec3(_pos.x, _timeLeft + 1 + 0.4, -_pos.y), glm::vec3(0, 0, 0), 0.1, 'o');
-	c.Render(perspective, glm::vec3(_pos.x, _timeLeft + 1, -_pos.y), glm::vec3(0, 0, 0), 0.1, '!');
+	Character3D::AddToBuffer(glm::vec3(_pos.x, _timeLeft + 1 + 2, -_pos.y), glm::vec3(0, 0, 0), 0.1, 'H');
+	Character3D::AddToBuffer(glm::vec3(_pos.x, _timeLeft + 1 + 1.6, -_pos.y), glm::vec3(0, 0, 0), 0.1, 'e');
+	Character3D::AddToBuffer(glm::vec3(_pos.x, _timeLeft + 1 + 1.2, -_pos.y), glm::vec3(0, 0, 0), 0.1, 'l');
+	Character3D::AddToBuffer(glm::vec3(_pos.x, _timeLeft + 1 + 0.8, -_pos.y), glm::vec3(0, 0, 0), 0.1, 'l');
+	Character3D::AddToBuffer(glm::vec3(_pos.x, _timeLeft + 1 + 0.4, -_pos.y), glm::vec3(0, 0, 0), 0.1, 'o');
+	Character3D::AddToBuffer(glm::vec3(_pos.x, _timeLeft + 1, -_pos.y), glm::vec3(0, 0, 0), 0.1, '!');
 
 	_timeLeft -= dt;
 	if (_timeLeft < 0)

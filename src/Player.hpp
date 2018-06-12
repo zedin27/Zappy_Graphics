@@ -24,7 +24,7 @@ class	Player
 	glm::vec2 _modelDirChange;
 	float _height;
 	bool _moving;
-	Model *_model;
+	static Model *_model;
 
 	static std::map<uint64_t, std::list<Player*>> _staticPlayers;
 

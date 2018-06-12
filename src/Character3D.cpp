@@ -1,5 +1,7 @@
 #include "Character3D.hpp"
 
+std::vector<Character3D::RenderData> Character3D::_buffer;
+
 ShadingProgram *Character3D::_program = nullptr;
 bool	Character3D::_init;
 
@@ -85,6 +87,33 @@ Character3D::Character3D(void)
 	glUniform1i(_textureLocationID, 0);
 
 	_init = true;
+}
+
+void	Character3D::RenderAndClearBuffer(std::pair<glm::mat4, glm::mat4> perspective)
+{
+	auto comparison = [&perspective](RenderData& lhs, RenderData& rhs)
+	{
+		glm::vec4 p = perspective.first * glm::vec4(lhs.position, 1);
+		glm::vec4 q = perspective.first * glm::vec4(rhs.position, 1);
+
+		return q.z < p.z;
+	};
+	std::sort(_buffer.begin(), _buffer.end(), comparison);
+	for (auto data : _buffer)
+	{
+		Character3D c;
+		c.Render(perspective, data.position, data.color, data.size, data.c);
+	}
+	_buffer.resize(0);
+
+}
+
+void	Character3D::AddToBuffer(glm::vec3 position,
+		    glm::vec3 color,
+		    float size,
+		    char c)
+{
+	_buffer.push_back(RenderData{position, color, size, c});
 }
 
 void	Character3D::Render(std::pair<glm::mat4, glm::mat4> perspective,

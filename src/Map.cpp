@@ -281,6 +281,7 @@ Map::~Map(void)
 
 void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 {
+	dt *= _timeUnit;
 	_serverMonitor.Update();
 	const std::vector<const std::string>& commands = _serverMonitor.Commands();
 	const std::vector<const std::string>& data = _serverMonitor.Data();
@@ -308,4 +309,5 @@ void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 		p->Render(perspective);
 	}
 	Sound::Render(perspective, dt);
+	Character3D::RenderAndClearBuffer(perspective);
 }
