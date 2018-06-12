@@ -184,14 +184,26 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 		ss << data;
 
 		ss >> pos.x >> pos.y >> level; // can ignore these because of previous given information(?)
-
-		Player *p = getPlayer(playerID);
-		p->PartyMode(true);
+		while (ss)
+		{
+			ss >> playerID;
+			Player *p = getPlayer(playerID);
+			p->PartyMode(true);
+		}
 	};
 
-	_events["plv"] = [this](std::string data) //IGNORE
+	_events["plv"] = [this](std::string data) //player levels up
 	{
-		//ignore
+		int playerID;
+                int level;
+
+                std::stringstream ss;
+                ss << data;
+
+                ss >> playerID >> level;
+
+		Player *p = getPlayer(playerID);
+		p->SetLevel(level);
 	};
 
 	_events["pfk"] = [this](std::string data) //IGNORE
@@ -269,6 +281,10 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 
 		ss >> team_name;
 	};
+	_events["pie"] = [this](std::string data)
+	{
+		
+	};
 }
 
 Map::~Map(void)
@@ -281,7 +297,7 @@ Map::~Map(void)
 
 void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 {
-	dt *= _timeUnit;
+	dt *= _timeUnit / 6.0f;
 	_serverMonitor.Update();
 	const std::vector<const std::string>& commands = _serverMonitor.Commands();
 	const std::vector<const std::string>& data = _serverMonitor.Data();

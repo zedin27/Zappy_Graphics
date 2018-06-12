@@ -42,7 +42,7 @@ public:
 	void	PutDown(std::vector<int> resources);
 
 	void	PartyMode(bool);
-	void	LevelUp(void);
+	void	SetLevel(int);
 	const std::string&	Name(void);
 	int	ID(void);
 

@@ -95,8 +95,6 @@ _mapSize(mapSize)
 
 Player::~Player(void)
 {
-	delete _model;
-
 	uint64_t key = keyHash(_modelPos);
 	if (_staticPlayers.count(key) == 0)
 		return;
@@ -170,10 +168,10 @@ void	Player::PartyMode(bool mode)
 	_ritual = mode;
 }
 
-void	Player::LevelUp(void)
+void	Player::SetLevel(int level)
 {
-	if (_level < 8)
-		_level += 1;
+	_level = level;
+	assert(level >= 0 && level <= 8);
 }
 
 const std::string&	Player::Name(void)
