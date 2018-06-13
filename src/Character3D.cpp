@@ -96,7 +96,7 @@ void	Character3D::RenderAndClearBuffer(std::pair<glm::mat4, glm::mat4> perspecti
 		glm::vec4 p = perspective.first * glm::vec4(lhs.position, 1);
 		glm::vec4 q = perspective.first * glm::vec4(rhs.position, 1);
 
-		return q.z < p.z;
+		return p.z < q.z;
 	};
 	std::sort(_buffer.begin(), _buffer.end(), comparison);
 	for (auto data : _buffer)
