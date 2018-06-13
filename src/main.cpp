@@ -7,6 +7,7 @@
 #include "Grid.hpp"
 #include "Egg.hpp"
 #include "FPSDisplay.hpp"
+#include "Character3D.hpp"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -44,10 +45,10 @@ int	main(int argc, char *argv[])
 	if (argc <= 2
 	    || ((clientfd = client_socket(argv[1], atoi(argv[2]))) == -1))
 		return (EXIT_FAILURE);
-
+	
 	Window window(1600, 900, "zap");
 	FreeCamera cam(window);
-	Light light(glm::vec3(0, 100, 0), glm::vec3(1, 1, 0.2), 100);
+	Light light(glm::vec3(0, 100, 0), glm::vec3(1, 1, 1), 100);
 	Map map(clientfd);
 	Time clock;
 	FPSDisplay fps;
@@ -61,11 +62,14 @@ int	main(int argc, char *argv[])
 	char buf[10];
 	int lol = read(clientfd, buf, 10);
 	write(clientfd, "GRAPHIC\n", 8);
-	
+
 	glClearColor(0.2, 0.25, 0.3, 1);
 	while (!window.ShouldClose())
 	{
-		window.Clear();
+		GLenum err;
+		if ((err = glGetError()) != GL_NO_ERROR)
+			std::cerr << err << std::endl;
+		window.Clear();		
 		clock.Step();
 		cam.Update();
 

@@ -2,6 +2,7 @@
 
 #include "zappy.hpp"
 #include "Model.hpp"
+#include "Character3D.hpp"
 
 class	Player
 {
@@ -23,7 +24,7 @@ class	Player
 	glm::vec2 _modelDirChange;
 	float _height;
 	bool _moving;
-	Model *_model;
+	static Model *_model;
 
 	static std::map<uint64_t, std::list<Player*>> _staticPlayers;
 
@@ -41,7 +42,7 @@ public:
 	void	PutDown(std::vector<int> resources);
 
 	void	PartyMode(bool);
-	void	LevelUp(void);
+	void	SetLevel(int);
 	const std::string&	Name(void);
 	int	ID(void);
 

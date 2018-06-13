@@ -1,5 +1,7 @@
 #include "Player.hpp"
 
+Model	*Player::_model = nullptr;
+
 std::map<uint64_t, std::list<Player*>> Player::_staticPlayers;
 
 static uint64_t	keyHash(glm::vec2 pos)
@@ -47,6 +49,7 @@ void	Player::startMoving(void)
 	{
 		std::list<Player*> &l = _staticPlayers[key];
 		auto iter = std::find(l.begin(), l.end(), this);
+		assert(iter != l.end());
 		l.erase(iter);
 		if (l.empty())
 			_staticPlayers.erase(key);
@@ -86,19 +89,19 @@ _mapSize(mapSize)
 	_moveTime = 0;
 	_modelDirChange = glm::vec2(0, 0);
 	stopMoving();
-	_model = new Model("assets/player.model");
+	if (!_model)
+		_model = new Model("assets/player.model");
 }
 
 Player::~Player(void)
 {
-	delete _model;
-
 	uint64_t key = keyHash(_modelPos);
 	if (_staticPlayers.count(key) == 0)
 		return;
 	std::list<Player*> &l = _staticPlayers[key];
 	auto iter = std::find(l.begin(), l.end(), this);
-	l.erase(iter);
+	if (iter != l.end())
+		l.erase(iter);
 	if (l.empty())
 		_staticPlayers.erase(key);
 	spaceOutPlayers(key);
@@ -108,11 +111,21 @@ void	Player::MoveTo(glm::vec2 pos)
 {
 	if (pos != _pos)
 	{
-		assert(pos == glm::mod(_pos + _dir, _mapSize));
+		glm::vec2 moveDir;
+		if (pos == glm::mod(_pos + glm::vec2(1, 0), _mapSize))
+			moveDir = glm::vec2(1, 0);
+		else if (pos == glm::mod(_pos + glm::vec2(0, 1), _mapSize))
+			moveDir = glm::vec2(0, 1);
+		else if (pos == glm::mod(_pos + glm::vec2(-1, 0), _mapSize))
+			moveDir = glm::vec2(-1, 0);
+		else if (pos == glm::mod(_pos + glm::vec2(0, -1), _mapSize))
+			moveDir = glm::vec2(0, -1);
+		else
+			assert(0 && "player movement was invalid");
 		
 		_pos = pos;
 		_moveTime = 1;
-		_moveDir = _dir;
+		_moveDir = moveDir;
 		startMoving();
 	}
 }
@@ -121,7 +134,7 @@ void	Player::SetDir(glm::vec2 dir)
 {
 	if (dir != _dir)
 	{
-		assert(glm::dot(dir, _dir) == 0);
+		assert(glm::dot(dir, _dir) == 0 && "player did not turn 90 degrees");
 		
 		_dir = dir;
 		_modelDirChange = _dir - _modelDir;
@@ -155,10 +168,10 @@ void	Player::PartyMode(bool mode)
 	_ritual = mode;
 }
 
-void	Player::LevelUp(void)
+void	Player::SetLevel(int level)
 {
-	if (_level < 8)
-		_level += 1;
+	_level = level;
+	assert(level >= 0 && level <= 8);
 }
 
 const std::string&	Player::Name(void)
@@ -216,4 +229,11 @@ void	Player::Render(std::pair<glm::mat4, glm::mat4> perspective)
 
 	glm::mat4 rot = glm::rotate(angle, glm::vec3(0, 1, 0));
 	_model->Render(perspective, rot, glm::vec3(_modelPos.x, _height * 0.5, -_modelPos.y));
+
+	Character3D::AddToBuffer(glm::vec3(_modelPos.x ,
+					   _height * 0.5 + 0.6,
+					   -_modelPos.y),
+				 glm::vec3(1, 0, 0),
+				 0.07,
+				 _level + '0');
 }
