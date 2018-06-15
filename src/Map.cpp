@@ -77,7 +77,7 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 		for (auto& q : quantity)
 			ss >> q;
 		for (int i = 0; i < _resources[x][y].size(); i++)
-			_resources[x][y][i] += quantity[i];
+			_resources[x][y][i] = quantity[i];
 	};
 
 	_events["sgt"] = [this](std::string data) //get time unit (check Time.cpp/hpp)
@@ -139,11 +139,27 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 		resources[resource] += 1;
 		
 		Player *p = getPlayer(playerID);
-		glm::vec2 pos = glm::round(p->GetPosition());
-		_resources[(size_t)pos.x][(size_t)pos.y][resource] -= 1;		
 		p->PickUp(resources);
 	};
 
+	_events["pdr"] = [this](std::string data) //player drops resource
+	{
+		int playerID;
+		int resource;
+
+		std::stringstream ss;
+		ss << data;
+
+		ss >> playerID >> resource;
+
+		std::vector<int> resources;
+		resources.resize(7);
+		resources[resource] += 1;
+
+		Player *p = getPlayer(playerID);
+		p->PutDown(resources);
+	};
+	
 	_events["pin"] = [this](std::string data) //ignore
 	{
 		//ignore
@@ -174,7 +190,7 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 		Sound::AddSound(pos, message);
 	};
 
-	_events["pic"] = [this](std::string data) // IGNORE: a ritual happens on square (with the force idea?)
+	_events["pic"] = [this](std::string data) // IGNORE: a ritual happens on square
 	{
 		glm::vec2 pos;
 		int level;
@@ -183,12 +199,12 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 		std::stringstream ss;
 		ss << data;
 
-		ss >> pos.x >> pos.y >> level; // can ignore these because of previous given information(?)
+		ss >> pos.x >> pos.y >> level; // can ignore these because of previous info
 		while (ss)
 		{
 			ss >> playerID;
 			Player *p = getPlayer(playerID);
-			p->PartyMode(true);
+			p->BeginRitual();
 		}
 	};
 
@@ -280,9 +296,8 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 
 		ss >> team_name;
 	};
-	_events["pie"] = [this](std::string data)
+	_events["pie"] = [this](std::string data) //end of ritual, just ignore
 	{
-		
 	};
 }
 
@@ -306,7 +321,7 @@ void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 		if (_events.count(commands[i]) != 0)
 			_events[commands[i]](data[i]);
 	}
-	
+
 	for (Egg *e : _eggs)
 	{
 		e->Render(perspective);

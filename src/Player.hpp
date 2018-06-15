@@ -9,7 +9,7 @@ class	Player
 	glm::vec2 _pos;
 	glm::vec2 _dir;
 	std::vector<int> _resources;
-	bool _ritual;
+	double _ritualTime;
 	int _level;
 	std::string _teamName;
 	int _ID;
@@ -24,7 +24,9 @@ class	Player
 	glm::vec2 _modelDirChange;
 	float _height;
 	bool _moving;
-	static Model *_model;
+	Model *_model;
+	static Model *_partyModel;
+	static Model *_normalModel;
 
 	static std::map<uint64_t, std::list<Player*>> _staticPlayers;
 
@@ -41,7 +43,7 @@ public:
 	void	PickUp(std::vector<int> resources);
 	void	PutDown(std::vector<int> resources);
 
-	void	PartyMode(bool);
+	void	BeginRitual(void);
 	void	SetLevel(int);
 	const std::string&	Name(void);
 	int	ID(void);

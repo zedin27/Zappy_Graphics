@@ -1,0 +1,32 @@
+meshes/player.obj
+textures/red.png
+
+	Material:
+        0.5 specular
+        1 diffuse
+        4000 fog
+        0 0 0 fogcol
+
+	Transform:
+	
+	matrix
+	0.5 0 0 0
+	0 0.5 0 0
+	0 0 0.5 0
+	0 0 0 1
+	
+	0.0
+
+        matrix
+        0.4 0 0 0
+        0 0.5 0 0
+        0 0 0.4 0
+        0 0 0 1
+
+        0.5
+
+ 	Cycle:
+	1.0
+
+	Position:
+	0 0 0

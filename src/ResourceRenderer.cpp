@@ -15,14 +15,25 @@ void	ResourceRenderer::Render(std::pair<glm::mat4, glm::mat4> perspective,
 				 glm::vec2 pos,
 				 const std::vector<int>& resources)
 {
+	static constexpr float d = 0.35;
+	static constexpr glm::vec2 displacements[7] = {{d, -d},
+						       {0, d},
+						       {d, d},
+						       {d, 0},
+						       {-d, 0},
+						       {-d, -d},
+						       {0, -d}};
+	
 	for (size_t i = 0; i < 7; i++)
 	{
+		assert(resources[i] >= 0);
 		if (resources[i] == 0)
 			continue;
 		glm::mat3 transform(1);
 		transform[1][1] = 1 + 0.2 * resources[i];
 		_models[i]->Render(perspective,
 				  glm::mat4(transform),
-				  glm::vec3(pos.x, 0, -pos.y));
+				  glm::vec3(pos.x + displacements[i].x, 0,
+					    -(pos.y + displacements[i].y)));
 	}
 }

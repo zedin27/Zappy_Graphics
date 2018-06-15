@@ -42,13 +42,8 @@ vec3	GetLightModifier(vec3 v, vec3 n)
 		float diffuse = pow(max(dot(n, -normalize(ray)), 0), DIFFUSE);
 
 		ret += max(diffuse, 0.2) * lightColor[i] * intensity;
-
-		vec3 reflect = normalize(ray) - 2 * n * dot(normalize(ray), n);
-		float error = max(length(reflect * length(v)), 0.001);
-		float specular = SPECULAR / pow(error, 2);
-
-		ret += specular * lightColor[i] * intensity;
-
+		
+		//not adding specular for zappy since vertices are too spread out
 	}
 	return ret;
 }
