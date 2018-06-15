@@ -2,7 +2,7 @@ meshes/block.obj
 textures/green.png
 
 	Material:
-	0 specular
+	1 specular
 	0.2 diffuse
 	4000 fog
 	0 0 0 fogcol
@@ -11,7 +11,7 @@ textures/green.png
 	
 	matrix
 	0.95 0 0 0
-	0 0.95 0 0
+	0 1 0 0
 	0 0 0.95 0
 	0 0 0 1
 	
