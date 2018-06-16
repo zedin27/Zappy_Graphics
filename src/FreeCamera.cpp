@@ -98,3 +98,27 @@ std::pair<glm::mat4, glm::mat4> FreeCamera::Perspective(void)
 {
 	return _perspective;
 }
+
+bool	FreeCamera::RayShouldTrigger(void)
+{
+	if (_window.MouseClick(0))
+		return true;
+	return false;
+}
+
+std::pair<glm::vec3, glm::vec3> FreeCamera::Ray(void)
+{
+	std::pair<glm::vec3, glm::vec3> out;
+
+	glm::mat4 inverseProjection = glm::inverse(_perspective.second);
+	glm::mat4 inverseLookAt = glm::inverse(_perspective.first);
+
+	glm::vec4 p = {_window.MousePos().x, _window.MousePos().y, 0, 1};
+
+	p = inverseLookAt * inverseProjection * p;
+	p /= p.w;
+	
+	out.second = glm::normalize(glm::vec3(p) - _position); //vector
+	out.first = _position;
+	return out;
+}

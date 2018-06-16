@@ -28,7 +28,7 @@ int client_socket(char *ip, uint16_t port)
 	client_addr.sin_family = AF_INET;
 	client_addr.sin_port = htons(port);
 	if ((client_addr.sin_addr.s_addr = inet_addr(ip)) == (in_addr_t)-1)
-    return (-1);
+		return (-1);
 	if (connect(sockfd, (struct sockaddr*)&client_addr, sizeof(struct sockaddr_in)) == -1)
 	{
 		printf("No bueno %s\n", strerror(errno));		
@@ -74,8 +74,10 @@ int	main(int argc, char *argv[])
 		cam.Update();
 
 		sky.Render(cam.Perspective());
+		if (cam.RayShouldTrigger())
+			map.RayCast(cam.Ray());
 		map.Render(cam.Perspective(), clock.Delta());
-
+		Player::RenderGUI(window);
 		fps.Render();
 		window.Render();
 	}	

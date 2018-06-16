@@ -28,4 +28,6 @@ public:
 	
 	void	Update(void);
 	std::pair<glm::mat4, glm::mat4> Perspective(void);
+	bool	RayShouldTrigger(void);
+	std::pair<glm::vec3, glm::vec3> Ray(void);
 };

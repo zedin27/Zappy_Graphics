@@ -3,7 +3,10 @@
 Model	*Player::_partyModel = nullptr;
 Model	*Player::_normalModel = nullptr;
 
+std::list<Player*> Player::_players;
 std::map<uint64_t, std::list<Player*>> Player::_staticPlayers;
+
+Sprite2D	*Player::_guiBackground = nullptr;
 
 static uint64_t	keyHash(glm::vec2 pos)
 {
@@ -71,6 +74,85 @@ void	Player::spaceOutPlayers(uint64_t key)
 	}
 }
 
+void	Player::RayCastGUI(glm::vec3 rayPoint, glm::vec3 rayDir)
+{
+	std::vector<Player*> candidates;
+	for (auto p : _players)
+	{
+		p->_guiActive = false;
+		glm::vec3 pos(p->_modelPos.x, p->_height * 0.5 + 0.25, -p->_modelPos.y);
+		float dist = glm::length(glm::cross(rayDir, pos - rayPoint));
+
+		if (dist < 0.3)
+			candidates.push_back(p);
+	}
+	//find closest candidate to rayPoint
+
+	Player *playerHit = nullptr;
+	float minDist = 10000000;
+	
+	for (auto p : candidates)
+	{
+		glm::vec3 v = glm::vec3(p->_modelPos.x, p->_height * 0.5, -p->_modelPos.y) - rayPoint;
+		if (glm::dot(v, rayDir) < 0) // ray intersection happened behind ray
+			continue;
+		float dist = glm::length(v);
+		if (dist < minDist)
+		{
+			dist = minDist;
+			playerHit = p;
+		}
+	}
+	if (playerHit == nullptr) // no player was hit by the ray
+		return;
+
+	playerHit->_guiActive = true;
+}
+
+static void	render_word(std::string word, float x, float y, float size, Window &window)
+{
+	size_t len = std::max(word.length(), (size_t)2);
+	window.SetRenderMask(x, y,
+			     std::min(size * len, 1 - x),
+			     std::min(size, 1 - y));
+	Text t(word);
+	t.Render(window.GetAspect());
+}
+
+void	Player::DrawGUI(Window& window)
+{
+	//draw GUI box:
+
+	window.SetRenderMask(0.8, 0.57, 0.2, 0.43);
+	_guiBackground->Render();
+
+	window.SetRenderMask(0.81, 0.9, 0.18, 0.1);
+	Text team(_teamName);
+	team.Render(window.GetAspect());
+
+	
+	render_word("Food     ", 0.8, 0.85, 0.015, window);
+	render_word("Linemate ", 0.8, 0.80, 0.015, window);
+	render_word("Deraumere", 0.8, 0.77, 0.015, window);
+	render_word("Sibur    ", 0.8, 0.74, 0.015, window);
+	render_word("Mendiane ", 0.8, 0.71, 0.015, window);
+	render_word("Phirus   ", 0.8, 0.68, 0.015, window);
+	render_word("Thystame ", 0.8, 0.65, 0.015, window);
+
+	render_word(std::to_string(_resources[0]), 0.95, 0.85, 0.015, window);
+	for (int i = 1; i < 7; i++)
+		render_word(std::to_string(_resources[i]), 0.95, 0.83 - i * 0.03, 0.015, window);
+	
+	window.RemoveRenderMask();
+}
+
+void	Player::RenderGUI(Window& window)
+{
+	for (auto p : _players)
+		if (p->_guiActive)
+			p->DrawGUI(window);
+}
+
 Player::Player(glm::vec2 pos, glm::vec2 dir, const std::string& name, int ID, int level, glm::vec2 mapSize) :
 _pos(pos),
 _dir(dir),
@@ -91,10 +173,18 @@ _mapSize(mapSize)
 	if (!_normalModel)
 		_normalModel = new Model("assets/normal_player.model");
 	_model = _normalModel;
+	
+	_guiActive = false;
+	if (!_guiBackground)
+		_guiBackground = new Sprite2D("assets/textures/gui_background.png");
+	
+	_players.push_back(this);
 }
 
 Player::~Player(void)
 {
+	_players.remove(this);
+	
 	uint64_t key = keyHash(_modelPos);
 	if (_staticPlayers.count(key) == 0)
 		return;
@@ -141,25 +231,13 @@ void	Player::SetDir(glm::vec2 dir)
 	}
 }
 
-void	Player::PickUp(std::vector<int> resources)
+void	Player::UpdateResources(std::vector<int> resources)
 {
 	assert(resources.size() == 7);
 	for (int i = 0; i < 7; i++)
 	{
 		assert(resources[i] >= 0);
-		_resources[i] += resources[i];
-		assert(_resources[i] >= 0);
-	}
-}
-
-void	Player::PutDown(std::vector<int> resources)
-{
-	assert(resources.size() == 7);
-	for (int i = 0; i < 7; i++)
-	{
-		assert(resources[i] >= 0);
-		_resources[i] -= resources[i];
-		assert(_resources[i] >= 0);
+		_resources[i] = resources[i];
 	}
 }
 
@@ -237,7 +315,7 @@ void	Player::Render(std::pair<glm::mat4, glm::mat4> perspective)
 	glm::mat4 rot = glm::rotate(angle, glm::vec3(0, 1, 0));
 
 	glm::vec3 outlineCol;
-	if (_ritualTime > 0)
+	if (_guiActive)//_ritualTime > 0)
 		outlineCol = glm::vec3(0.7, 0.2, 0.2);
 	else
 		outlineCol = glm::vec3(0, 0, 0);

@@ -205,7 +205,7 @@ bool	Window::KeyPress(int key)
 void	MouseButtonCallback(GLFWwindow *glfwWindow, int button, int action, int)
 {
 	Window *window = reinterpret_cast<Window*>(glfwGetWindowUserPointer(glfwWindow));
-	
+
 	if (action == GLFW_PRESS)
 	{
 		window->_mouseButtons[button] = true;
