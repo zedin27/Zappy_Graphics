@@ -124,45 +124,28 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 
 	};
 
-	_events["pgt"] = [this](std::string data) //player picks resource
+	_events["pgt"] = [this](std::string data) //player picks resource - ignore
 	{
-		int playerID;
-		int resource;
-
-		std::stringstream ss;
-		ss << data;
-
-		ss >> playerID >> resource;
-
-		std::vector<int> resources;
-		resources.resize(7);
-		resources[resource] += 1;
-		
-		Player *p = getPlayer(playerID);
-		p->PickUp(resources);
 	};
 
-	_events["pdr"] = [this](std::string data) //player drops resource
+	_events["pdr"] = [this](std::string data) //player drops resource - ignore
 	{
-		int playerID;
-		int resource;
-
-		std::stringstream ss;
-		ss << data;
-
-		ss >> playerID >> resource;
-
-		std::vector<int> resources;
-		resources.resize(7);
-		resources[resource] += 1;
-
-		Player *p = getPlayer(playerID);
-		p->PutDown(resources);
 	};
 	
 	_events["pin"] = [this](std::string data) //ignore
 	{
-		//ignore
+		int playerid;
+		size_t x, y;
+		std::vector<int> quantity;
+		quantity.resize(7);
+
+		std::stringstream ss;
+		ss << data;
+		ss >> playerid >> x >> y;
+		for (auto& q : quantity)
+			ss >> q;
+		Player *p = getPlayer(playerid);
+		p->UpdateResources(quantity);
 	};
 
 	_events["pex"] = [this](std::string data) //a player kick out
@@ -340,4 +323,9 @@ void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 	}
 	Sound::Render(perspective, dt);
 	Character3D::RenderAndClearBuffer(perspective);
+}
+
+void	Map::RayCast(std::pair<glm::vec3, glm::vec3> ray)
+{	
+	Player::RayCastGUI(ray.first, ray.second);
 }

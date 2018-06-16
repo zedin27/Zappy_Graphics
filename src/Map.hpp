@@ -31,4 +31,5 @@ public:
 	~Map(void);
 
 	void	Render(std::pair<glm::mat4, glm::mat4> perspective, double dt);
+	void	RayCast(std::pair<glm::vec3, glm::vec3> ray);
 };
