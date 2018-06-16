@@ -109,68 +109,39 @@ void	Player::RayCastGUI(glm::vec3 rayPoint, glm::vec3 rayDir)
 	playerHit->_guiActive = true;
 }
 
+static void	render_word(std::string word, float x, float y, float size, Window &window)
+{
+	size_t len = std::max(word.length(), (size_t)2);
+	window.SetRenderMask(x, y,
+			     std::min(size * len, 1 - x),
+			     std::min(size, 1 - y));
+	Text t(word);
+	t.Render(window.GetAspect());
+}
+
 void	Player::DrawGUI(Window& window)
 {
 	//draw GUI box:
 
-	window.SetRenderMask(0.8, 0.5, 0.2, 0.5);	
+	window.SetRenderMask(0.8, 0.57, 0.2, 0.43);
 	_guiBackground->Render();
 
-	window.SetRenderMask(0.82, 0.95, 0.08, 0.05);
-	Text food("Food:");
-	food.Render(window.GetAspect());
+	window.SetRenderMask(0.81, 0.9, 0.18, 0.1);
+	Text team(_teamName);
+	team.Render(window.GetAspect());
 
-	window.SetRenderMask(0.9, 0.95, 0.08, 0.05);
-	Text foodAmount(std::to_string(_resources[0]));
-	foodAmount.Render(window.GetAspect());
-
-	window.SetRenderMask(0.82, 0.9, 0.08, 0.05);
-	Text linemate("Linemate:");
-	linemate.Render(window.GetAspect());
 	
-	window.SetRenderMask(0.9, 0.9, 0.08, 0.05);
-	Text linemateAmount(std::to_string(_resources[1]));
-	linemateAmount.Render(window.GetAspect());
+	render_word("Food     ", 0.8, 0.85, 0.015, window);
+	render_word("Linemate ", 0.8, 0.80, 0.015, window);
+	render_word("Deraumere", 0.8, 0.77, 0.015, window);
+	render_word("Sibur    ", 0.8, 0.74, 0.015, window);
+	render_word("Mendiane ", 0.8, 0.71, 0.015, window);
+	render_word("Phirus   ", 0.8, 0.68, 0.015, window);
+	render_word("Thystame ", 0.8, 0.65, 0.015, window);
 
-	window.SetRenderMask(0.82, 0.85, 0.08, 0.05);
-	Text deraumere("Deraumere:");
-	deraumere.Render(window.GetAspect());
-
-	window.SetRenderMask(0.9, 0.85, 0.08, 0.05);
-	Text deraumereAmount(std::to_string(_resources[2]));
-	deraumereAmount.Render(window.GetAspect());
-
-	window.SetRenderMask(0.82, 0.8, 0.08, 0.05);
-	Text sibur("Sibur:");
-	sibur.Render(window.GetAspect());
-
-	window.SetRenderMask(0.9, 0.8, 0.08, 0.05);
-	Text siburAmount(std::to_string(_resources[3]));
-	siburAmount.Render(window.GetAspect());
-
-	window.SetRenderMask(0.82, 0.75, 0.08, 0.05);
-	Text mendiane("Mendiane:");
-	mendiane.Render(window.GetAspect());
-
-	window.SetRenderMask(0.9, 0.75, 0.08, 0.05);
-	Text mendianeAmount(std::to_string(_resources[4]));
-	mendianeAmount.Render(window.GetAspect());
-
-	window.SetRenderMask(0.82, 0.7, 0.08, 0.05);
-	Text phirus("Phirus:");
-	phirus.Render(window.GetAspect());
-
-	window.SetRenderMask(0.9, 0.7, 0.08, 0.05);
-	Text phirusAmount(std::to_string(_resources[5]));
-	phirusAmount.Render(window.GetAspect());
-
-	window.SetRenderMask(0.82, 0.65, 0.08, 0.05);
-	Text thystame("Thystame:");
-	thystame.Render(window.GetAspect());
-
-	window.SetRenderMask(0.9, 0.65, 0.08, 0.05);
-	Text thystameAmount(std::to_string(_resources[6]));
-	thystameAmount.Render(window.GetAspect());
+	render_word(std::to_string(_resources[0]), 0.95, 0.85, 0.015, window);
+	for (int i = 1; i < 7; i++)
+		render_word(std::to_string(_resources[i]), 0.95, 0.83 - i * 0.03, 0.015, window);
 	
 	window.RemoveRenderMask();
 }

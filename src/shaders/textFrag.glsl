@@ -9,4 +9,5 @@ out vec4 color;
 void	main()
 {
 	color = texture(tex, tex_uv).rgba;
+	color.a = pow(color.a, 3);
 }
