@@ -16,6 +16,8 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
+#define NDEBUG
+
 int client_socket(char *ip, uint16_t port)
 {
 	struct sockaddr_in	client_addr;

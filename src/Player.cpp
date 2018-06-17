@@ -275,11 +275,11 @@ void	Player::Update(double dt)
 {
 	if (_moveTime > 0)
 	{
-		glm::vec2 newpos = _modelPos + _modelDir * dt;
+		glm::vec2 newpos = _modelPos + _moveDir * dt;
 		newpos = glm::mod(newpos, _mapSize);
 		_modelPos = newpos;
 		_moveTime -= dt;
-		if (_moveTime < 0)
+		if (_moveTime <= 0)
 		{
 			_moveTime = 0;
 			_modelPos = _pos;
