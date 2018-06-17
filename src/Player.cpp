@@ -49,7 +49,8 @@ void	Player::startMoving(void)
 	{
 		std::list<Player*> &l = _staticPlayers[key];
 		auto iter = std::find(l.begin(), l.end(), this);
-		assert(iter != l.end());
+		if (iter == l.end())
+			return;
 		l.erase(iter);
 		if (l.empty())
 			_staticPlayers.erase(key);

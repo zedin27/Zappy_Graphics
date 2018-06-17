@@ -1,5 +1,7 @@
 #pragma once
 
+#define NDEBUG
+
 #define GLFW_INCLUDE_GLCOREARB
 #define GLM_ENABLE_EXPERIMENTAL
 #include <GLFW/glfw3.h>
