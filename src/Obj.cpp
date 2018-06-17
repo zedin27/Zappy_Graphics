@@ -79,11 +79,12 @@ _textureParser(texturePath)
 		_init = true;
 	}
 
-	float material[6] = {specular, diffuse, fog, fogcol.x, fogcol.y, fogcol.z};
-	_normalProgram->Use();
-	glUniform1fv(_materialID_normal, 6, material);
-	_cartoonProgram->Use();
-	glUniform1fv(_materialID_cartoon, 6, material);
+	_material[0] = specular;
+	_material[1] = diffuse;
+	_material[2] = fog;
+	_material[3] = fogcol.x;
+	_material[4] = fogcol.y;
+	_material[5] = fogcol.z;
 
 	glGenBuffers(1, &_uvArrayID);
 	glBindBuffer(GL_ARRAY_BUFFER, _uvArrayID);
@@ -183,6 +184,11 @@ void	Obj::Render(std::pair<glm::mat4, glm::mat4> perspective,
 		    float outlineSize,
 		    bool cartoon)
 {
+        _normalProgram->Use();
+        glUniform1fv(_materialID_normal, 6, _material);
+        _cartoonProgram->Use();
+        glUniform1fv(_materialID_cartoon, 6, _material);
+	
 	glEnable(GL_CULL_FACE);
 	glFrontFace(GL_CCW);
 	

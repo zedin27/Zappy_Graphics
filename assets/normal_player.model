@@ -1,5 +1,5 @@
 meshes/player.obj
-textures/grey.png
+textures/player.png
 
 	Material:
         0.5 specular

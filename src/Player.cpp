@@ -179,11 +179,15 @@ _mapSize(mapSize)
 		_guiBackground = new Sprite2D("assets/textures/gui_background.png");
 	
 	_players.push_back(this);
+
+	_light = new Light(glm::vec3(_modelPos.x, _height * 0.5 + 0.5, -_modelPos.y), glm::vec3(1, 1, 1), 1.0f);
 }
 
 Player::~Player(void)
 {
 	_players.remove(this);
+
+	delete _light;
 	
 	uint64_t key = keyHash(_modelPos);
 	if (_staticPlayers.count(key) == 0)
@@ -271,11 +275,11 @@ void	Player::Update(double dt)
 {
 	if (_moveTime > 0)
 	{
-		glm::vec2 newpos = _modelPos + _modelDir * dt;
+		glm::vec2 newpos = _modelPos + _moveDir * dt;
 		newpos = glm::mod(newpos, _mapSize);
 		_modelPos = newpos;
 		_moveTime -= dt;
-		if (_moveTime < 0)
+		if (_moveTime <= 0)
 		{
 			_moveTime = 0;
 			_modelPos = _pos;
@@ -301,6 +305,9 @@ void	Player::Update(double dt)
 	}
 	else
 		_model = _normalModel;
+
+	delete _light;
+	_light = new Light(glm::vec3(_modelPos.x, _height * 0.5 + 0.5, -_modelPos.y), glm::vec3(1, 1, 1), 1.0f);
 }
 
 void	Player::Render(std::pair<glm::mat4, glm::mat4> perspective)

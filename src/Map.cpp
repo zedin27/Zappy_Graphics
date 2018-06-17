@@ -40,6 +40,7 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 
 		//change player position
 		Player *p = getPlayer(playerID);
+
 		p->MoveTo(pos);
 		p->SetDir(_directions[orientation - 1]);
 

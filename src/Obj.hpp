@@ -54,6 +54,8 @@ class	Obj
 	
 	GLuint _textureID;
 
+	float _material[6];
+	
 	void	renderBackface(std::pair<glm::mat4, glm::mat4> perspective,
 			       glm::mat4 transform,
 			       glm::vec3 color,
