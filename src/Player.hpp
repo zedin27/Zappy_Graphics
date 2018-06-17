@@ -5,6 +5,7 @@
 #include "Character3D.hpp"
 #include "Window.hpp"
 #include "Sprite2D.hpp"
+#include "Light.hpp"
 
 class	Player
 {
@@ -28,6 +29,7 @@ class	Player
 	float _height;
 	bool _moving;	
 	Model *_model;
+	Light *_light;
 	static Model *_partyModel;
 	static Model *_normalModel;
 	static std::map<uint64_t, std::list<Player*>> _staticPlayers;

@@ -79,6 +79,8 @@ _textureParser(texturePath)
 		_init = true;
 	}
 
+	std::cout << filePath << std::endl << diffuse << std::endl << std::endl;
+	
 	float material[6] = {specular, diffuse, fog, fogcol.x, fogcol.y, fogcol.z};
 	_normalProgram->Use();
 	glUniform1fv(_materialID_normal, 6, material);

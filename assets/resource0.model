@@ -1,5 +1,5 @@
-meshes/block.obj
-textures/red.png
+meshes/apple.obj
+textures/apple.png
 
 	Material:
         0 specular
