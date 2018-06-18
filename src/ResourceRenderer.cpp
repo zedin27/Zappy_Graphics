@@ -34,6 +34,9 @@ void	ResourceRenderer::Render(std::pair<glm::mat4, glm::mat4> perspective,
 		_models[i]->Render(perspective,
 				  glm::mat4(transform),
 				  glm::vec3(pos.x + displacements[i].x, 0,
-					    -(pos.y + displacements[i].y)));
+					    -(pos.y + displacements[i].y)),
+				   glm::vec3(0, 0, 0),
+				   0.02,
+				   true);
 	}
 }

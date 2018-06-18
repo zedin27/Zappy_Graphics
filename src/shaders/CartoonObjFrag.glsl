@@ -18,5 +18,5 @@ void	main()
 	vec4 col = texture(tex, Data.uv).rgba * vec4(Data.lightMod, 1);	
 	color = col * (1 - fog) + vec4(Data.fogcol * fog, 1);
 	
-	color = round(color * 2) / 2;
+	color = round(color * 10) / 10;
 }

@@ -8,6 +8,7 @@
 #include "Grid.hpp"
 #include "ServerMonitor.hpp"
 #include "ResourceRenderer.hpp"
+#include "Text.hpp"
 
 class	Map
 {
@@ -20,6 +21,7 @@ class	Map
 	Grid _grid;
 	ServerMonitor _serverMonitor;
 	ResourceRenderer _resourceRenderer;
+	std::string _gameOver;
 	
 	static const glm::vec2 _directions[4];
 	

@@ -227,7 +227,7 @@ void	Obj::Render(std::pair<glm::mat4, glm::mat4> perspective,
 			   glm::value_ptr(transform));
 
 	//lighting	
-	int size = Light::positions.size();
+	int size = std::min(Light::positions.size(), 99);
 	if (size)
 	{
 		glUniform3fv(lightPos[cartoon],

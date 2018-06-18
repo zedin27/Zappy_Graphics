@@ -17,7 +17,7 @@ FreeCamera::FreeCamera(Window& window) : _window(window)
         glm::mat4 translate = glm::translate(_position);
 	glm::mat4 lookAt = glm::lookAt(glm::vec3(translate * _rotation * glm::vec4(_basePos, 1)),
 				       glm::vec3(translate * _rotation * glm::vec4(_forward, 1)),
-				       glm::vec3(translate * _rotation * glm::vec4(_up, 0)));
+				       _up);
 	glm::mat4 perspective = glm::perspective(glm::radians(_fov), _window.GetAspect(), _near, _far);
 	_perspective.first = lookAt;
 	_perspective.second = perspective;

@@ -3,7 +3,7 @@ textures/purple.png
 
 	Material:
         0 specular
-        0 diffuse
+        0.2 diffuse
         4000 fog
         0 0 0 fogcol
 

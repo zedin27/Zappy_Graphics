@@ -279,6 +279,8 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 		ss << data;
 
 		ss >> team_name;
+
+		_gameOver = team_name;
 	};
 	_events["pie"] = [this](std::string data) //end of ritual, just ignore
 	{
@@ -324,6 +326,12 @@ void	Map::Render(std::pair<glm::mat4, glm::mat4> perspective, double dt)
 	}
 	Sound::Render(perspective, dt);
 	Character3D::RenderAndClearBuffer(perspective);
+
+	if (_gameOver.length())
+	{
+		Text t("   " + _gameOver + " wins!   ");
+		t.Render(16.0f/9.0f);
+	}
 }
 
 void	Map::RayCast(std::pair<glm::vec3, glm::vec3> ray)

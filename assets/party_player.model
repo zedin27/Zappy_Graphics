@@ -1,5 +1,5 @@
 meshes/player.obj
-textures/player.png
+textures/party_player.png
 
 	Material:
         0.5 specular
@@ -25,8 +25,24 @@ textures/player.png
 
         0.5
 
+        matrix
+        0.5 0 0 0
+        0 0.5 0 0
+        0 0 0.5 0
+        0 0 0 1
+
+        1.0
+
+        matrix
+        0.45 0 0 0
+        0 0.5 0 0
+        0 0 0.45 0
+        0 0 0 1
+
+        1.2
+
  	Cycle:
-	1.0
+	1.4
 
 	Position:
 	0 0 0
