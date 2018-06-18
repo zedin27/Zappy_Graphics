@@ -17,6 +17,24 @@ static uint64_t	keyHash(glm::vec2 pos)
 	return out;
 }
 
+static glm::vec3 nameHash(const std::string &name)
+{
+        int x = 0;
+	int y = 0;
+        int z = 0;
+
+        for (int i = 0; i < name.length(); i++)
+        {
+                x += name[i] * name[i] * 31;
+		y += name[i] * name[i] * 17;
+                z += name[i] * name[i] * 13;
+        }
+        x %= 10;
+        y %= 10;
+        z %= 10;
+	return glm::vec3(x / 10.0f, y / 10.0f, z / 10.0f);
+}
+
 void	Player::stopMoving(void)
 {
 	//add itself to the list of static players and call spaceOutPlayers()
@@ -181,7 +199,7 @@ _mapSize(mapSize)
 	
 	_players.push_back(this);
 
-	_light = new Light(glm::vec3(_modelPos.x, _height * 0.5 + 0.5, -_modelPos.y), glm::vec3(0.2, 0.2, 0.2), 1.0f);
+	_light = new Light(glm::vec3(_modelPos.x, _height * 0.5 + 0.5, -_modelPos.y), nameHash(_teamName), 1.0f);
 }
 
 Player::~Player(void)
@@ -308,25 +326,7 @@ void	Player::Update(double dt)
 		_model = _normalModel;
 
 	delete _light;
-	_light = new Light(glm::vec3(_modelPos.x, _height * 0.5 + 0.5, -_modelPos.y), glm::vec3(0.2, 0.2, 0.2), 1.0f);
-}
-
-static glm::vec3 nameHash(const std::string &name)
-{
-	int x = 0;
-	int y = 0;
-	int z = 0;
-	
-	for (int i = 0; i < name.length(); i++)
-	{
-		x += name[i] * name[i] * 31;
-		y += name[i] * name[i] * 17;
-		z += name[i] * name[i] * 13;
-	}
-	x %= 10;
-	y %= 10;
-	z %= 10;
-	return glm::vec3(x / 10.0f, y / 10.0f, z / 10.0f);
+	_light = new Light(glm::vec3(_modelPos.x, _height * 0.5 + 0.5, -_modelPos.y), nameHash(_teamName), 1.0f);
 }
 
 void	Player::Render(std::pair<glm::mat4, glm::mat4> perspective)
