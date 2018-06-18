@@ -350,7 +350,8 @@ void	Player::Render(std::pair<glm::mat4, glm::mat4> perspective)
 		       rot,
 		       glm::vec3(_modelPos.x, _height * 0.5, -_modelPos.y),
 		       outlineCol,
-		       0.02);
+		       0.02,
+		       true);
 
 	Character3D::AddToBuffer(glm::vec3(_modelPos.x ,
 					   _height * 0.5 + 0.6,

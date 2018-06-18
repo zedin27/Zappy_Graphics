@@ -1,9 +1,9 @@
-meshes/block.obj
+meshes/rock.obj
 textures/orange.png
 
 	Material:
         0 specular
-        0.2 diffuse
+        1 diffuse
         4000 fog
         0 0 0 fogcol
 
