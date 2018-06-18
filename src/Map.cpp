@@ -59,10 +59,6 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 
 		_players.push_back(new Player(pos, _directions[orientation - 1], team_name, playerID, level, _size));
 	};
-	_events["ebo"] = [this](std::string data)
-	{
-		//ignore
-	};
 	_events["tna"] = [this](std::string data)
 	{
 		//ignore
@@ -218,7 +214,7 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 		//ignore
 	};
 
-	_events["eht"] = [this](std::string data) //egg hatches - remove it
+	_events["ebo"] = [this](std::string data) //player connects, remove egg
 	{
 		int eggID;
 
