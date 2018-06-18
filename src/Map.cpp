@@ -121,7 +121,7 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 
 		ss >> egg >> playerID >> pos.x >> pos.y;
 
-		_eggs.push_back(new Egg(pos, playerID));
+		_eggs.push_back(new Egg(pos, egg));
 
 	};
 
