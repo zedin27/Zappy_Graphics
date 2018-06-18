@@ -164,11 +164,18 @@ Map::Map(int fd) : _size(glm::vec2(0, 0)), _serverMonitor(fd)
 	{
 		int playerID;
 		std::string message;
-
+		std::string temp;
+		
 		std::stringstream ss;
 		ss << data;
 
-		ss >> playerID >> message;
+		ss >> playerID;
+		while (ss)
+		{
+			ss >> temp;
+			message += temp + " ";
+		}
+		
 		Player *p = getPlayer(playerID);
 		glm::vec2 pos = glm::round(p->GetPosition());
 		Sound::AddSound(pos, message);
