@@ -6,6 +6,10 @@ Zappy is the culmination of your previous efforts in advanced UNIX: here you wil
 ## How to start it?
 First, you need to run `make deps` to install all the dependencies needed. It might take a while because of `gl` packages needed. After `make deps`, do a `make all` to compile. Once everything is compiled, simply run `./zappy` and magic will happen :)
 
+## Screenshots
+<img src="resources/GUI.png" width="600" />
+<img src="resources/objects_outline.png" width="600" />
+
 ## Made by
 * 🇫🇷[Terrance Huu-Luu](https://github.com/tle-huu)
 * 🇵🇱[Paulina Sprawka](https://github.com/spraweczga)
