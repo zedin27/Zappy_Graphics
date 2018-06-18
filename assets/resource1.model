@@ -1,5 +1,5 @@
 meshes/block.obj
-textures/green.png
+textures/grey.png
 
 	Material:
         0 specular

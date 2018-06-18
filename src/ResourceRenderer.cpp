@@ -29,7 +29,7 @@ void	ResourceRenderer::Render(std::pair<glm::mat4, glm::mat4> perspective,
 		assert(resources[i] >= 0);
 		if (resources[i] == 0)
 			continue;
-		glm::mat3 transform(1);
+		glm::mat3 transform(std::min(pow(resources[i], 0.333), 3.0));
 		transform[1][1] = 1 + 0.2 * resources[i];
 		_models[i]->Render(perspective,
 				  glm::mat4(transform),
